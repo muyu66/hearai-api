@@ -798,10 +798,10 @@ export const WordScalarFieldEnum = {
   id: 'id',
   word: 'word',
   translation: 'translation',
-  ukPron: 'ukPron',
-  usPron: 'usPron',
-  ukPronVoice: 'ukPronVoice',
-  usPronVoice: 'usPronVoice',
+  ukPhonetic: 'ukPhonetic',
+  usPhonetic: 'usPhonetic',
+  ukPronunciation: 'ukPronunciation',
+  uSPronunciation: 'uSPronunciation',
   level: 'level',
   wordEmbedding: 'wordEmbedding',
   translationEmbedding: 'translationEmbedding',
@@ -912,10 +912,10 @@ export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 export const WordOrderByRelevanceFieldEnum = {
   word: 'word',
   translation: 'translation',
-  ukPron: 'ukPron',
-  usPron: 'usPron',
-  ukPronVoice: 'ukPronVoice',
-  usPronVoice: 'usPronVoice'
+  ukPhonetic: 'ukPhonetic',
+  usPhonetic: 'usPhonetic',
+  ukPronunciation: 'ukPronunciation',
+  uSPronunciation: 'uSPronunciation'
 } as const
 
 export type WordOrderByRelevanceFieldEnum = (typeof WordOrderByRelevanceFieldEnum)[keyof typeof WordOrderByRelevanceFieldEnum]

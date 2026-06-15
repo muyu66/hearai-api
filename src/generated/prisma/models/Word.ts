@@ -40,10 +40,10 @@ export type WordMinAggregateOutputType = {
   id: bigint | null
   word: string | null
   translation: string | null
-  ukPron: string | null
-  usPron: string | null
-  ukPronVoice: string | null
-  usPronVoice: string | null
+  ukPhonetic: string | null
+  usPhonetic: string | null
+  ukPronunciation: string | null
+  uSPronunciation: string | null
   level: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -54,10 +54,10 @@ export type WordMaxAggregateOutputType = {
   id: bigint | null
   word: string | null
   translation: string | null
-  ukPron: string | null
-  usPron: string | null
-  ukPronVoice: string | null
-  usPronVoice: string | null
+  ukPhonetic: string | null
+  usPhonetic: string | null
+  ukPronunciation: string | null
+  uSPronunciation: string | null
   level: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -68,10 +68,10 @@ export type WordCountAggregateOutputType = {
   id: number
   word: number
   translation: number
-  ukPron: number
-  usPron: number
-  ukPronVoice: number
-  usPronVoice: number
+  ukPhonetic: number
+  usPhonetic: number
+  ukPronunciation: number
+  uSPronunciation: number
   level: number
   wordEmbedding: number
   translationEmbedding: number
@@ -96,10 +96,10 @@ export type WordMinAggregateInputType = {
   id?: true
   word?: true
   translation?: true
-  ukPron?: true
-  usPron?: true
-  ukPronVoice?: true
-  usPronVoice?: true
+  ukPhonetic?: true
+  usPhonetic?: true
+  ukPronunciation?: true
+  uSPronunciation?: true
   level?: true
   createdAt?: true
   updatedAt?: true
@@ -110,10 +110,10 @@ export type WordMaxAggregateInputType = {
   id?: true
   word?: true
   translation?: true
-  ukPron?: true
-  usPron?: true
-  ukPronVoice?: true
-  usPronVoice?: true
+  ukPhonetic?: true
+  usPhonetic?: true
+  ukPronunciation?: true
+  uSPronunciation?: true
   level?: true
   createdAt?: true
   updatedAt?: true
@@ -124,10 +124,10 @@ export type WordCountAggregateInputType = {
   id?: true
   word?: true
   translation?: true
-  ukPron?: true
-  usPron?: true
-  ukPronVoice?: true
-  usPronVoice?: true
+  ukPhonetic?: true
+  usPhonetic?: true
+  ukPronunciation?: true
+  uSPronunciation?: true
   level?: true
   wordEmbedding?: true
   translationEmbedding?: true
@@ -227,10 +227,10 @@ export type WordGroupByOutputType = {
   id: bigint
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice: string | null
-  usPronVoice: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation: string | null
+  uSPronunciation: string | null
   level: number
   wordEmbedding: runtime.JsonValue | null
   translationEmbedding: runtime.JsonValue | null
@@ -266,10 +266,10 @@ export type WordWhereInput = {
   id?: Prisma.BigIntFilter<"Word"> | bigint | number
   word?: Prisma.StringFilter<"Word"> | string
   translation?: Prisma.StringFilter<"Word"> | string
-  ukPron?: Prisma.StringFilter<"Word"> | string
-  usPron?: Prisma.StringFilter<"Word"> | string
-  ukPronVoice?: Prisma.StringNullableFilter<"Word"> | string | null
-  usPronVoice?: Prisma.StringNullableFilter<"Word"> | string | null
+  ukPhonetic?: Prisma.StringFilter<"Word"> | string
+  usPhonetic?: Prisma.StringFilter<"Word"> | string
+  ukPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
+  uSPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
   level?: Prisma.IntFilter<"Word"> | number
   wordEmbedding?: Prisma.JsonNullableFilter<"Word">
   translationEmbedding?: Prisma.JsonNullableFilter<"Word">
@@ -283,10 +283,10 @@ export type WordOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   word?: Prisma.SortOrder
   translation?: Prisma.SortOrder
-  ukPron?: Prisma.SortOrder
-  usPron?: Prisma.SortOrder
-  ukPronVoice?: Prisma.SortOrderInput | Prisma.SortOrder
-  usPronVoice?: Prisma.SortOrderInput | Prisma.SortOrder
+  ukPhonetic?: Prisma.SortOrder
+  usPhonetic?: Prisma.SortOrder
+  ukPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
+  uSPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   wordEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
   translationEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,10 +304,10 @@ export type WordWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.WordWhereInput[]
   NOT?: Prisma.WordWhereInput | Prisma.WordWhereInput[]
   translation?: Prisma.StringFilter<"Word"> | string
-  ukPron?: Prisma.StringFilter<"Word"> | string
-  usPron?: Prisma.StringFilter<"Word"> | string
-  ukPronVoice?: Prisma.StringNullableFilter<"Word"> | string | null
-  usPronVoice?: Prisma.StringNullableFilter<"Word"> | string | null
+  ukPhonetic?: Prisma.StringFilter<"Word"> | string
+  usPhonetic?: Prisma.StringFilter<"Word"> | string
+  ukPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
+  uSPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
   level?: Prisma.IntFilter<"Word"> | number
   wordEmbedding?: Prisma.JsonNullableFilter<"Word">
   translationEmbedding?: Prisma.JsonNullableFilter<"Word">
@@ -321,10 +321,10 @@ export type WordOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   word?: Prisma.SortOrder
   translation?: Prisma.SortOrder
-  ukPron?: Prisma.SortOrder
-  usPron?: Prisma.SortOrder
-  ukPronVoice?: Prisma.SortOrderInput | Prisma.SortOrder
-  usPronVoice?: Prisma.SortOrderInput | Prisma.SortOrder
+  ukPhonetic?: Prisma.SortOrder
+  usPhonetic?: Prisma.SortOrder
+  ukPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
+  uSPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   wordEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
   translationEmbedding?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -345,10 +345,10 @@ export type WordScalarWhereWithAggregatesInput = {
   id?: Prisma.BigIntWithAggregatesFilter<"Word"> | bigint | number
   word?: Prisma.StringWithAggregatesFilter<"Word"> | string
   translation?: Prisma.StringWithAggregatesFilter<"Word"> | string
-  ukPron?: Prisma.StringWithAggregatesFilter<"Word"> | string
-  usPron?: Prisma.StringWithAggregatesFilter<"Word"> | string
-  ukPronVoice?: Prisma.StringNullableWithAggregatesFilter<"Word"> | string | null
-  usPronVoice?: Prisma.StringNullableWithAggregatesFilter<"Word"> | string | null
+  ukPhonetic?: Prisma.StringWithAggregatesFilter<"Word"> | string
+  usPhonetic?: Prisma.StringWithAggregatesFilter<"Word"> | string
+  ukPronunciation?: Prisma.StringNullableWithAggregatesFilter<"Word"> | string | null
+  uSPronunciation?: Prisma.StringNullableWithAggregatesFilter<"Word"> | string | null
   level?: Prisma.IntWithAggregatesFilter<"Word"> | number
   wordEmbedding?: Prisma.JsonNullableWithAggregatesFilter<"Word">
   translationEmbedding?: Prisma.JsonNullableWithAggregatesFilter<"Word">
@@ -361,10 +361,10 @@ export type WordCreateInput = {
   id?: bigint | number
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice?: string | null
-  usPronVoice?: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation?: string | null
+  uSPronunciation?: string | null
   level?: number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -378,10 +378,10 @@ export type WordUncheckedCreateInput = {
   id?: bigint | number
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice?: string | null
-  usPronVoice?: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation?: string | null
+  uSPronunciation?: string | null
   level?: number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -395,10 +395,10 @@ export type WordUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -412,10 +412,10 @@ export type WordUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -429,10 +429,10 @@ export type WordCreateManyInput = {
   id?: bigint | number
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice?: string | null
-  usPronVoice?: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation?: string | null
+  uSPronunciation?: string | null
   level?: number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -445,10 +445,10 @@ export type WordUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -461,10 +461,10 @@ export type WordUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -483,10 +483,10 @@ export type WordCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   word?: Prisma.SortOrder
   translation?: Prisma.SortOrder
-  ukPron?: Prisma.SortOrder
-  usPron?: Prisma.SortOrder
-  ukPronVoice?: Prisma.SortOrder
-  usPronVoice?: Prisma.SortOrder
+  ukPhonetic?: Prisma.SortOrder
+  usPhonetic?: Prisma.SortOrder
+  ukPronunciation?: Prisma.SortOrder
+  uSPronunciation?: Prisma.SortOrder
   level?: Prisma.SortOrder
   wordEmbedding?: Prisma.SortOrder
   translationEmbedding?: Prisma.SortOrder
@@ -504,10 +504,10 @@ export type WordMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   word?: Prisma.SortOrder
   translation?: Prisma.SortOrder
-  ukPron?: Prisma.SortOrder
-  usPron?: Prisma.SortOrder
-  ukPronVoice?: Prisma.SortOrder
-  usPronVoice?: Prisma.SortOrder
+  ukPhonetic?: Prisma.SortOrder
+  usPhonetic?: Prisma.SortOrder
+  ukPronunciation?: Prisma.SortOrder
+  uSPronunciation?: Prisma.SortOrder
   level?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -518,10 +518,10 @@ export type WordMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   word?: Prisma.SortOrder
   translation?: Prisma.SortOrder
-  ukPron?: Prisma.SortOrder
-  usPron?: Prisma.SortOrder
-  ukPronVoice?: Prisma.SortOrder
-  usPronVoice?: Prisma.SortOrder
+  ukPhonetic?: Prisma.SortOrder
+  usPhonetic?: Prisma.SortOrder
+  ukPronunciation?: Prisma.SortOrder
+  uSPronunciation?: Prisma.SortOrder
   level?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -556,10 +556,10 @@ export type WordCreateWithoutDailyWordsInput = {
   id?: bigint | number
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice?: string | null
-  usPronVoice?: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation?: string | null
+  uSPronunciation?: string | null
   level?: number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -572,10 +572,10 @@ export type WordUncheckedCreateWithoutDailyWordsInput = {
   id?: bigint | number
   word: string
   translation: string
-  ukPron: string
-  usPron: string
-  ukPronVoice?: string | null
-  usPronVoice?: string | null
+  ukPhonetic: string
+  usPhonetic: string
+  ukPronunciation?: string | null
+  uSPronunciation?: string | null
   level?: number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -604,10 +604,10 @@ export type WordUpdateWithoutDailyWordsInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -620,10 +620,10 @@ export type WordUncheckedUpdateWithoutDailyWordsInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   word?: Prisma.StringFieldUpdateOperationsInput | string
   translation?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPron?: Prisma.StringFieldUpdateOperationsInput | string
-  usPron?: Prisma.StringFieldUpdateOperationsInput | string
-  ukPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  usPronVoice?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
+  ukPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  uSPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   wordEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   translationEmbedding?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -667,10 +667,10 @@ export type WordSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   word?: boolean
   translation?: boolean
-  ukPron?: boolean
-  usPron?: boolean
-  ukPronVoice?: boolean
-  usPronVoice?: boolean
+  ukPhonetic?: boolean
+  usPhonetic?: boolean
+  ukPronunciation?: boolean
+  uSPronunciation?: boolean
   level?: boolean
   wordEmbedding?: boolean
   translationEmbedding?: boolean
@@ -687,10 +687,10 @@ export type WordSelectScalar = {
   id?: boolean
   word?: boolean
   translation?: boolean
-  ukPron?: boolean
-  usPron?: boolean
-  ukPronVoice?: boolean
-  usPronVoice?: boolean
+  ukPhonetic?: boolean
+  usPhonetic?: boolean
+  ukPronunciation?: boolean
+  uSPronunciation?: boolean
   level?: boolean
   wordEmbedding?: boolean
   translationEmbedding?: boolean
@@ -699,7 +699,7 @@ export type WordSelectScalar = {
   deletedAt?: boolean
 }
 
-export type WordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "word" | "translation" | "ukPron" | "usPron" | "ukPronVoice" | "usPronVoice" | "level" | "wordEmbedding" | "translationEmbedding" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["word"]>
+export type WordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "word" | "translation" | "ukPhonetic" | "usPhonetic" | "ukPronunciation" | "uSPronunciation" | "level" | "wordEmbedding" | "translationEmbedding" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["word"]>
 export type WordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dailyWords?: boolean | Prisma.Word$dailyWordsArgs<ExtArgs>
   _count?: boolean | Prisma.WordCountOutputTypeDefaultArgs<ExtArgs>
@@ -714,16 +714,22 @@ export type $WordPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: bigint
     word: string
     translation: string
-    ukPron: string
-    usPron: string
+    /**
+     * 英式音标
+     */
+    ukPhonetic: string
+    /**
+     * 美式音标
+     */
+    usPhonetic: string
     /**
      * 英式音标发音地址
      */
-    ukPronVoice: string | null
+    ukPronunciation: string | null
     /**
      * 美式音标发音地址
      */
-    usPronVoice: string | null
+    uSPronunciation: string | null
     level: number
     /**
      * 单词向量
@@ -1109,10 +1115,10 @@ export interface WordFieldRefs {
   readonly id: Prisma.FieldRef<"Word", 'BigInt'>
   readonly word: Prisma.FieldRef<"Word", 'String'>
   readonly translation: Prisma.FieldRef<"Word", 'String'>
-  readonly ukPron: Prisma.FieldRef<"Word", 'String'>
-  readonly usPron: Prisma.FieldRef<"Word", 'String'>
-  readonly ukPronVoice: Prisma.FieldRef<"Word", 'String'>
-  readonly usPronVoice: Prisma.FieldRef<"Word", 'String'>
+  readonly ukPhonetic: Prisma.FieldRef<"Word", 'String'>
+  readonly usPhonetic: Prisma.FieldRef<"Word", 'String'>
+  readonly ukPronunciation: Prisma.FieldRef<"Word", 'String'>
+  readonly uSPronunciation: Prisma.FieldRef<"Word", 'String'>
   readonly level: Prisma.FieldRef<"Word", 'Int'>
   readonly wordEmbedding: Prisma.FieldRef<"Word", 'Json'>
   readonly translationEmbedding: Prisma.FieldRef<"Word", 'Json'>

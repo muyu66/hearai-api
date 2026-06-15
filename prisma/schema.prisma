@@ -48,16 +48,18 @@ model User {
 
 /// 单词表
 model Word {
-  id          BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  word        String  @db.VarChar(200)
-  translation String  @db.VarChar(1000)
-  ukPron      String  @map("uk_pron") @db.VarChar(255)
-  usPron      String  @map("us_pron") @db.VarChar(255)
+  id              BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  word            String  @db.VarChar(200)
+  translation     String  @db.VarChar(1000)
+  /// 英式音标
+  ukPhonetic      String  @map("uk_phonetic") @db.VarChar(255)
+  /// 美式音标
+  usPhonetic      String  @map("us_phonetic") @db.VarChar(255)
   /// 英式音标发音地址
-  ukPronVoice String? @map("uk_pron_voice") @db.VarChar(255)
+  ukPronunciation String? @map("uk_pronunciation") @db.VarChar(255)
   /// 美式音标发音地址
-  usPronVoice String? @map("us_pron_voice") @db.VarChar(255)
-  level       Int     @default(1) @map("level") @db.UnsignedTinyInt
+  uSPronunciation String? @map("us_pronunciation") @db.VarChar(255)
+  level           Int     @default(1) @map("level") @db.UnsignedTinyInt
 
   /// 单词向量
   wordEmbedding        Json? @map("word_embedding")
