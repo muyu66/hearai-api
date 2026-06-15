@@ -1,0 +1,138 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum PronunciationType {
+  // 英式发音
+  UK
+  // 美式发音
+  US
+}
+
+enum QuestionMode {
+  // 中译英
+  TRAN_TO_WORD
+  // 英译中
+  WORD_TO_TRAN
+  // 声音选中文
+  SOUND_TO_TRAN
+}
+
+/// 用户表
+model User {
+  id             BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  username       String            @unique @db.VarChar(50)
+  nickname       String            @default("") @db.VarChar(100)
+  /// 单词难度等级
+  wordLevel      Int               @default(0) @map("word_level") @db.UnsignedTinyInt
+  /// 每日单词任务数量
+  dailyWordCount Int               @default(0) @map("daily_word_count") @db.UnsignedSmallInt
+  /// 发音类型
+  pronType       PronunciationType @map("pron_type")
+
+  wechatOpenid String? @unique @map("wechat_openid") @db.VarChar(255)
+  googleOpenid String? @unique @map("google_openid") @db.VarChar(255)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  @@map("users")
+}
+
+/// 单词表
+model Word {
+  id          BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  word        String  @db.VarChar(200)
+  translation String  @db.VarChar(1000)
+  ukPron      String  @map("uk_pron") @db.VarChar(255)
+  usPron      String  @map("us_pron") @db.VarChar(255)
+  /// 英式音标发音地址
+  ukPronVoice String? @map("uk_pron_voice") @db.VarChar(255)
+  /// 美式音标发音地址
+  usPronVoice String? @map("us_pron_voice") @db.VarChar(255)
+  level       Int     @default(1) @map("level") @db.UnsignedTinyInt
+
+  /// 单词向量
+  wordEmbedding        Json? @map("word_embedding")
+  /// 释义向量
+  translationEmbedding Json? @map("translation_embedding")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  dailyWords DailyWord[]
+
+  /// 同一单词只能有一条记录
+  @@unique(word)
+  @@map("words")
+}
+
+/// 用户单词
+model UserWord {
+  id          BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  userId      BigInt @map("user_id") @db.UnsignedBigInt
+  wordId      BigInt @map("word_id") @db.UnsignedBigInt
+  /// 类似于每日单词任务
+  dailyWordId BigInt @map("daily_word_id") @db.UnsignedBigInt
+
+  failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt
+  /// 思考时间 单位ms
+  thinkingTime Int          @default(0) @map("thinking_time") @db.UnsignedInt
+  failedMode   Int          @default(0) @map("failed_mode") @db.UnsignedTinyInt
+  questionMode QuestionMode @map("question_mode")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  /// 同一用户同一单词在同一天只能有一条记录
+  @@unique([userId, wordId, dailyWordId])
+  @@map("user_words")
+}
+
+/// 用户已经掌握的单词
+model UserMasterWord {
+  id     BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  userId BigInt @map("user_id") @db.UnsignedBigInt
+  wordId BigInt @map("word_id") @db.UnsignedBigInt
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  /// 同一用户同一单词只能有一条记录
+  @@unique([userId, wordId])
+  @@map("user_master_words")
+}
+
+/// 每日推送单词
+model DailyWord {
+  id           BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  userId       BigInt       @map("user_id") @db.UnsignedBigInt
+  wordId       BigInt       @map("word_id") @db.UnsignedBigInt
+  questionMode QuestionMode @map("question_mode")
+  /// 是否完成今天的任务
+  isFinished   Boolean      @default(false) @map("is_finished")
+  finishedAt   DateTime?    @map("finished_at") @db.DateTime(0)
+
+  createdDate String @map("created_date") @db.VarChar(10)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  /// 关联单词
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  /// 同一用户同一单词同一天同一题型只能有一条记录
+  @@unique([userId, wordId, createdDate, questionMode])
+  @@map("daily_words")
+}
