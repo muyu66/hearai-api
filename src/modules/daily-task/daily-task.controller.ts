@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CurrUser } from '../../common/decorators/current-user.decorator';
 import type { AuthUser } from '../../common/interfaces/auth-user.interface';
 import { DailyTaskService } from './daily-task.service';
-import { TodayWordDto } from './dto/daily-task.dto';
+import { NextTaskTimeDto, TodayWordDto } from './dto/daily-task.dto';
 import { ReportDailyTaskWordDto } from './dto/report-daily-task-word.dto';
 
 @Controller('api/daily-tasks')
@@ -12,6 +12,13 @@ export class DailyTaskController {
   @Get('today-words')
   async getTodayWords(@CurrUser() authUser: AuthUser): Promise<TodayWordDto[]> {
     return this.dailyTaskService.getTodayWords(authUser.userId);
+  }
+
+  @Get('next-task-time')
+  async getNextTaskTime(
+    @CurrUser() authUser: AuthUser,
+  ): Promise<NextTaskTimeDto> {
+    return this.dailyTaskService.getNextTaskTime(authUser.userId);
   }
 
   @Post(':taskId/report')

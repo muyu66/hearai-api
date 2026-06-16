@@ -3,7 +3,7 @@ import { differenceInHours, format } from 'date-fns';
 import { DailyTask } from 'src/generated/prisma/client';
 import { QuestionMode } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
-import { TodayWordDto } from './dto/daily-task.dto';
+import { NextTaskTimeDto, TodayWordDto } from './dto/daily-task.dto';
 import { ReportDailyTaskWordDto } from './dto/report-daily-task-word.dto';
 
 @Injectable()
@@ -57,7 +57,7 @@ export class DailyTaskService {
             userId,
             wordId: word.id,
             // TODO 计算出来的
-            questionMode: QuestionMode.TRAN_TO_WORD,
+            questionMode: QuestionMode.WORD_TO_TRAN,
             isFinished: false,
             finishedAt: null,
             createdDate: today,
@@ -92,14 +92,57 @@ export class DailyTaskService {
       const sameDay = today === latestTask.createdDate;
       const within6Hours = differenceInHours(now, latestTask.updatedAt) < 6;
 
-      // sameDay 同一天：意味着已经创建过了，仍然沿用今天的任务
-      // within6Hours 跨天但不足 6 小时：仍然沿用昨天的任务
+      // sameDay 同一天：意味着已经创建过了，仍然沿用之前的任务
+      // within6Hours 跨天但不足 6 小时：仍然沿用之前的任务
       if (sameDay || within6Hours) {
         return latestTask;
       }
     }
     // 创建新的task
     return await this.createTodayWords(userId, today);
+  }
+
+  /**
+   * 获取下一次推送单词的时间
+   * @param userId
+   * @returns
+   */
+  async getNextTaskTime(userId: bigint): Promise<NextTaskTimeDto> {
+    const now = new Date();
+    const today = format(now, 'yyyy-MM-dd');
+
+    // 获取用户最新的任务
+    const latestTask = await this.prisma.dailyTask.findFirst({
+      where: {
+        userId,
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    if (latestTask) {
+      const sameDay = today === latestTask.createdDate;
+      const diffHours = differenceInHours(now, latestTask.updatedAt);
+      const within6Hours = diffHours < 6;
+
+      // 针对短时间跨天的特殊处理
+      if (!sameDay && within6Hours) {
+        return {
+          tomorrow: false,
+          hours: diffHours,
+        };
+      } else {
+        return {
+          tomorrow: true,
+          hours: 0,
+        };
+      }
+    }
+    return {
+      tomorrow: true,
+      hours: 0,
+    };
   }
 
   /**
@@ -139,7 +182,8 @@ export class DailyTaskService {
         case QuestionMode.SOUND_TO_TRAN:
         case QuestionMode.WORD_TO_TRAN:
           res.push({
-            id: dailyTaskWord.id,
+            id: dailyTaskWord.id.toString(),
+            taskId: dailyTask.id.toString(),
             questionMode: dailyTaskWord.questionMode,
             question: word,
             ukPronunciation,
@@ -151,7 +195,8 @@ export class DailyTaskService {
         case QuestionMode.SOUND_TO_WORD:
         case QuestionMode.TRAN_TO_WORD:
           res.push({
-            id: dailyTaskWord.id,
+            id: dailyTaskWord.id.toString(),
+            taskId: dailyTask.id.toString(),
             questionMode: dailyTaskWord.questionMode,
             question: translation,
             ukPronunciation,

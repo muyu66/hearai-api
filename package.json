@@ -9,6 +9,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "prisma:gen": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
