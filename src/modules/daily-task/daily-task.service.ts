@@ -183,7 +183,7 @@ export class DailyTaskService {
         case QuestionMode.WORD_TO_TRAN:
           res.push({
             id: dailyTaskWord.id.toString(),
-            taskId: dailyTask.id.toString(),
+            taskId: dailyTaskWord.dailyTaskId.toString(),
             questionMode: dailyTaskWord.questionMode,
             question: word,
             ukPronunciation,
@@ -196,7 +196,7 @@ export class DailyTaskService {
         case QuestionMode.TRAN_TO_WORD:
           res.push({
             id: dailyTaskWord.id.toString(),
-            taskId: dailyTask.id.toString(),
+            taskId: dailyTaskWord.dailyTaskId.toString(),
             questionMode: dailyTaskWord.questionMode,
             question: translation,
             ukPronunciation,
@@ -229,7 +229,7 @@ export class DailyTaskService {
       // 更新用户每日单词任务
       await tx.dailyTaskWord.update({
         where: {
-          id: dto.taskWordId,
+          id: BigInt(dto.taskWordId),
           dailyTaskId: taskId,
           userId,
           deletedAt: null,
