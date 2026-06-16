@@ -1,10 +1,41 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { differenceInHours, format } from 'date-fns';
-import { DailyTask } from 'src/generated/prisma/client';
+import { randomInt, shuffle } from 'es-toolkit';
+import { DailyTask, Word } from 'src/generated/prisma/client';
 import { QuestionMode } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { NextTaskTimeDto, TodayWordDto } from './dto/daily-task.dto';
 import { ReportDailyTaskWordDto } from './dto/report-daily-task-word.dto';
+
+type WordOptionData = {
+  translation?: string | null;
+  usPhonetic?: string | null;
+};
+
+const QUESTION_CONFIG = {
+  [QuestionMode.WORD_TO_SOUND]: {
+    question: (wordModel: Word) => wordModel.word,
+    answer: (wordModel: Word) => wordModel.usPhonetic,
+    confused: (wordModel: Word) => wordModel.confusedUsPhonetics as string[],
+    getter: (map: Map<string, WordOptionData>, key: string) =>
+      map.get(key)?.usPhonetic,
+  },
+
+  [QuestionMode.SOUND_TO_TRAN]: {
+    question: (wordModel: Word) => wordModel.usPhonetic,
+    answer: (wordModel: Word) => wordModel.translation,
+    confused: (wordModel: Word) => wordModel.confusedTranslations as string[],
+    getter: (map: Map<string, WordOptionData>, key: string) =>
+      map.get(key)?.translation,
+  },
+
+  [QuestionMode.TRAN_TO_WORD]: {
+    question: (wordModel: Word) => wordModel.translation,
+    answer: (wordModel: Word) => wordModel.word,
+    confused: (wordModel: Word) => wordModel.confusedWords as string[],
+    getter: (_map: Map<string, WordOptionData>, key: string) => key,
+  },
+} as const;
 
 @Injectable()
 export class DailyTaskService {
@@ -21,20 +52,13 @@ export class DailyTaskService {
   private async createTodayWords(
     userId: bigint,
     today: string,
+    dailyWordCount: number,
   ): Promise<DailyTask> {
     return this.prisma.$transaction(async (tx) => {
-      const user = await tx.user.findUniqueOrThrow({
-        where: {
-          id: userId,
-        },
-        select: {
-          dailyWordCount: true,
-        },
-      });
       const dailyTask = await tx.dailyTask.create({
         data: {
           userId,
-          taskCount: user.dailyWordCount,
+          taskCount: dailyWordCount,
           isFinished: false,
           finishedAt: null,
           createdDate: today,
@@ -47,7 +71,7 @@ export class DailyTaskService {
         select: {
           id: true,
         },
-        take: user.dailyWordCount,
+        take: dailyWordCount,
         skip: 0,
       });
       await tx.dailyTaskWord.createMany({
@@ -57,7 +81,7 @@ export class DailyTaskService {
             userId,
             wordId: word.id,
             // TODO 计算出来的
-            questionMode: QuestionMode.WORD_TO_TRAN,
+            questionMode: QuestionMode.WORD_TO_SOUND,
             isFinished: false,
             finishedAt: null,
             createdDate: today,
@@ -77,7 +101,12 @@ export class DailyTaskService {
    * @param today
    * @returns
    */
-  private async findOrCreateTask(userId: bigint, now: Date, today: string) {
+  private async findOrCreateTask(
+    userId: bigint,
+    now: Date,
+    today: string,
+    dailyWordCount: number,
+  ) {
     // 获取用户最新的任务
     const latestTask = await this.prisma.dailyTask.findFirst({
       where: {
@@ -99,7 +128,7 @@ export class DailyTaskService {
       }
     }
     // 创建新的task
-    return await this.createTodayWords(userId, today);
+    return await this.createTodayWords(userId, today, dailyWordCount);
   }
 
   /**
@@ -145,6 +174,31 @@ export class DailyTaskService {
     };
   }
 
+  private buildOptions(
+    confusedWords: string[],
+    correctAnswer: string,
+    getter: (word: string) => string | null | undefined,
+  ) {
+    const wrongAnswers = shuffle([
+      ...new Set(
+        confusedWords
+          .map(getter)
+          .filter((item): item is string => !!item && item !== correctAnswer),
+      ),
+    ]).slice(0, 2);
+
+    const answers = [...wrongAnswers];
+
+    const correctAnswerIndex = randomInt(0, answers.length + 1);
+
+    answers.splice(correctAnswerIndex, 0, correctAnswer);
+
+    return {
+      answers,
+      correctAnswerIndex,
+    };
+  }
+
   /**
    * 获取今天的单词
    * @param userId
@@ -154,7 +208,18 @@ export class DailyTaskService {
     const now = new Date();
     const today = format(now, 'yyyy-MM-dd');
 
-    const dailyTask = await this.findOrCreateTask(userId, now, today);
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
+
+    const dailyTask = await this.findOrCreateTask(
+      userId,
+      now,
+      today,
+      user.dailyWordCount,
+    );
 
     // 已完成今天的任务
     if (dailyTask.isFinished) {
@@ -172,44 +237,70 @@ export class DailyTaskService {
       },
     });
 
+    // 批量获取全部易混淆单词
+    const confusedAllWords = [
+      ...new Set(
+        dailyTaskWords.flatMap((item) => [
+          ...((item.word.confusedWords as string[]) ?? []),
+          ...((item.word.confusedTranslations as string[]) ?? []),
+          ...((item.word.confusedUsPhonetics as string[]) ?? []),
+        ]),
+      ),
+    ];
+    // 获取全部易混淆单词模型
+    const confusedAllWordModels = await this.prisma.word.findMany({
+      where: {
+        word: {
+          in: confusedAllWords,
+        },
+      },
+      take: 10,
+      select: {
+        word: true,
+        translation: true,
+        usPhonetic: true,
+      },
+    });
+    // 缓存
+    const confusedWordMap = new Map<string, WordOptionData>();
+    for (const item of confusedAllWordModels) {
+      if (!item.word) continue;
+      confusedWordMap.set(item.word, {
+        translation: item.translation,
+        usPhonetic: item.usPhonetic,
+      });
+    }
+
     // 转换格式
     const res: TodayWordDto[] = [];
     for (const dailyTaskWord of dailyTaskWords) {
-      const { word, translation, ukPronunciation, usPronunciation } =
-        dailyTaskWord.word;
+      const config = QUESTION_CONFIG[dailyTaskWord.questionMode];
 
-      switch (dailyTaskWord.questionMode) {
-        case QuestionMode.SOUND_TO_TRAN:
-        case QuestionMode.WORD_TO_TRAN:
-          res.push({
-            id: dailyTaskWord.id.toString(),
-            taskId: dailyTaskWord.dailyTaskId.toString(),
-            questionMode: dailyTaskWord.questionMode,
-            question: word,
-            ukPronunciation,
-            usPronunciation,
-            answers: [translation, translation, translation],
-            correctAnswerIndex: 0,
-          });
-          break;
-        case QuestionMode.SOUND_TO_WORD:
-        case QuestionMode.TRAN_TO_WORD:
-          res.push({
-            id: dailyTaskWord.id.toString(),
-            taskId: dailyTaskWord.dailyTaskId.toString(),
-            questionMode: dailyTaskWord.questionMode,
-            question: translation,
-            ukPronunciation,
-            usPronunciation,
-            answers: [word, word, word],
-            correctAnswerIndex: 0,
-          });
-          break;
-        default:
-          this.logger.error(
-            `Invalid question mode: dailyWord.id=${dailyTaskWord.id} dailyWord.questionMode=${String(dailyTaskWord.questionMode)}`,
-          );
+      if (!config) {
+        this.logger.error(
+          `Invalid question mode: ${dailyTaskWord.questionMode}`,
+        );
+        continue;
       }
+
+      const wordModel = dailyTaskWord.word;
+
+      const { answers, correctAnswerIndex } = this.buildOptions(
+        config.confused(wordModel),
+        config.answer(wordModel),
+        (key) => config.getter(confusedWordMap, key),
+      );
+
+      res.push({
+        id: dailyTaskWord.id.toString(),
+        taskId: dailyTaskWord.dailyTaskId.toString(),
+        questionMode: dailyTaskWord.questionMode,
+        question: config.question(wordModel),
+        ukPronunciation: wordModel.ukPronunciation,
+        usPronunciation: wordModel.usPronunciation,
+        answers,
+        correctAnswerIndex,
+      });
     }
     return res;
   }

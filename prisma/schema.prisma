@@ -15,15 +15,11 @@ enum PronunciationType {
   US
 }
 
+/// 英文->音标->中文->英文
 enum QuestionMode {
-  // 中译英
-  TRAN_TO_WORD
-  // 英译中
-  WORD_TO_TRAN
-  // 声音选中文
+  WORD_TO_SOUND
   SOUND_TO_TRAN
-  // 声音选英文
-  SOUND_TO_WORD
+  TRAN_TO_WORD
 }
 
 /// 用户表
@@ -64,9 +60,13 @@ model Word {
   level           Int     @default(1) @map("level") @db.UnsignedTinyInt
 
   /// 易混淆的单词
-  confusedWords       Json? @map("confused_words")
+  confusedWords        Json? @map("confused_words")
   /// 易混淆的中文释义
-  confusedTranslation Json? @map("confused_translation")
+  confusedTranslations Json? @map("confused_translations")
+  /// 易混淆的英式单词音标发音
+  confusedUkPhonetics  Json? @map("confused_uk_phonetics")
+  /// 易混淆的美式式单词音标发音
+  confusedUsPhonetics  Json? @map("confused_us_phonetics")
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)

@@ -804,7 +804,9 @@ export const WordScalarFieldEnum = {
   usPronunciation: 'usPronunciation',
   level: 'level',
   confusedWords: 'confusedWords',
-  confusedTranslation: 'confusedTranslation',
+  confusedTranslations: 'confusedTranslations',
+  confusedUkPhonetics: 'confusedUkPhonetics',
+  confusedUsPhonetics: 'confusedUsPhonetics',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'

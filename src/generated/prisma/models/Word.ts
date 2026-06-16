@@ -74,7 +74,9 @@ export type WordCountAggregateOutputType = {
   usPronunciation: number
   level: number
   confusedWords: number
-  confusedTranslation: number
+  confusedTranslations: number
+  confusedUkPhonetics: number
+  confusedUsPhonetics: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -130,7 +132,9 @@ export type WordCountAggregateInputType = {
   usPronunciation?: true
   level?: true
   confusedWords?: true
-  confusedTranslation?: true
+  confusedTranslations?: true
+  confusedUkPhonetics?: true
+  confusedUsPhonetics?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -233,7 +237,9 @@ export type WordGroupByOutputType = {
   usPronunciation: string | null
   level: number
   confusedWords: runtime.JsonValue | null
-  confusedTranslation: runtime.JsonValue | null
+  confusedTranslations: runtime.JsonValue | null
+  confusedUkPhonetics: runtime.JsonValue | null
+  confusedUsPhonetics: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -272,7 +278,9 @@ export type WordWhereInput = {
   usPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
   level?: Prisma.IntFilter<"Word"> | number
   confusedWords?: Prisma.JsonNullableFilter<"Word">
-  confusedTranslation?: Prisma.JsonNullableFilter<"Word">
+  confusedTranslations?: Prisma.JsonNullableFilter<"Word">
+  confusedUkPhonetics?: Prisma.JsonNullableFilter<"Word">
+  confusedUsPhonetics?: Prisma.JsonNullableFilter<"Word">
   createdAt?: Prisma.DateTimeFilter<"Word"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Word"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Word"> | Date | string | null
@@ -289,7 +297,9 @@ export type WordOrderByWithRelationInput = {
   usPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   confusedWords?: Prisma.SortOrderInput | Prisma.SortOrder
-  confusedTranslation?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedTranslations?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedUkPhonetics?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedUsPhonetics?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -310,7 +320,9 @@ export type WordWhereUniqueInput = Prisma.AtLeast<{
   usPronunciation?: Prisma.StringNullableFilter<"Word"> | string | null
   level?: Prisma.IntFilter<"Word"> | number
   confusedWords?: Prisma.JsonNullableFilter<"Word">
-  confusedTranslation?: Prisma.JsonNullableFilter<"Word">
+  confusedTranslations?: Prisma.JsonNullableFilter<"Word">
+  confusedUkPhonetics?: Prisma.JsonNullableFilter<"Word">
+  confusedUsPhonetics?: Prisma.JsonNullableFilter<"Word">
   createdAt?: Prisma.DateTimeFilter<"Word"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Word"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Word"> | Date | string | null
@@ -327,7 +339,9 @@ export type WordOrderByWithAggregationInput = {
   usPronunciation?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   confusedWords?: Prisma.SortOrderInput | Prisma.SortOrder
-  confusedTranslation?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedTranslations?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedUkPhonetics?: Prisma.SortOrderInput | Prisma.SortOrder
+  confusedUsPhonetics?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -351,7 +365,9 @@ export type WordScalarWhereWithAggregatesInput = {
   usPronunciation?: Prisma.StringNullableWithAggregatesFilter<"Word"> | string | null
   level?: Prisma.IntWithAggregatesFilter<"Word"> | number
   confusedWords?: Prisma.JsonNullableWithAggregatesFilter<"Word">
-  confusedTranslation?: Prisma.JsonNullableWithAggregatesFilter<"Word">
+  confusedTranslations?: Prisma.JsonNullableWithAggregatesFilter<"Word">
+  confusedUkPhonetics?: Prisma.JsonNullableWithAggregatesFilter<"Word">
+  confusedUsPhonetics?: Prisma.JsonNullableWithAggregatesFilter<"Word">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Word"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Word"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Word"> | Date | string | null
@@ -367,7 +383,9 @@ export type WordCreateInput = {
   usPronunciation?: string | null
   level?: number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -384,7 +402,9 @@ export type WordUncheckedCreateInput = {
   usPronunciation?: string | null
   level?: number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -401,7 +421,9 @@ export type WordUpdateInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -418,7 +440,9 @@ export type WordUncheckedUpdateInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -435,7 +459,9 @@ export type WordCreateManyInput = {
   usPronunciation?: string | null
   level?: number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -451,7 +477,9 @@ export type WordUpdateManyMutationInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -467,7 +495,9 @@ export type WordUncheckedUpdateManyInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -489,7 +519,9 @@ export type WordCountOrderByAggregateInput = {
   usPronunciation?: Prisma.SortOrder
   level?: Prisma.SortOrder
   confusedWords?: Prisma.SortOrder
-  confusedTranslation?: Prisma.SortOrder
+  confusedTranslations?: Prisma.SortOrder
+  confusedUkPhonetics?: Prisma.SortOrder
+  confusedUsPhonetics?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -562,7 +594,9 @@ export type WordCreateWithoutDailyTaskWordsInput = {
   usPronunciation?: string | null
   level?: number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -578,7 +612,9 @@ export type WordUncheckedCreateWithoutDailyTaskWordsInput = {
   usPronunciation?: string | null
   level?: number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -610,7 +646,9 @@ export type WordUpdateWithoutDailyTaskWordsInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -626,7 +664,9 @@ export type WordUncheckedUpdateWithoutDailyTaskWordsInput = {
   usPronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   confusedWords?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  confusedTranslation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedTranslations?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUkPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  confusedUsPhonetics?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -673,7 +713,9 @@ export type WordSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   usPronunciation?: boolean
   level?: boolean
   confusedWords?: boolean
-  confusedTranslation?: boolean
+  confusedTranslations?: boolean
+  confusedUkPhonetics?: boolean
+  confusedUsPhonetics?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -693,13 +735,15 @@ export type WordSelectScalar = {
   usPronunciation?: boolean
   level?: boolean
   confusedWords?: boolean
-  confusedTranslation?: boolean
+  confusedTranslations?: boolean
+  confusedUkPhonetics?: boolean
+  confusedUsPhonetics?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type WordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "word" | "translation" | "ukPhonetic" | "usPhonetic" | "ukPronunciation" | "usPronunciation" | "level" | "confusedWords" | "confusedTranslation" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["word"]>
+export type WordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "word" | "translation" | "ukPhonetic" | "usPhonetic" | "ukPronunciation" | "usPronunciation" | "level" | "confusedWords" | "confusedTranslations" | "confusedUkPhonetics" | "confusedUsPhonetics" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["word"]>
 export type WordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dailyTaskWords?: boolean | Prisma.Word$dailyTaskWordsArgs<ExtArgs>
   _count?: boolean | Prisma.WordCountOutputTypeDefaultArgs<ExtArgs>
@@ -738,7 +782,15 @@ export type $WordPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     /**
      * 易混淆的中文释义
      */
-    confusedTranslation: runtime.JsonValue | null
+    confusedTranslations: runtime.JsonValue | null
+    /**
+     * 易混淆的英式单词音标发音
+     */
+    confusedUkPhonetics: runtime.JsonValue | null
+    /**
+     * 易混淆的美式式单词音标发音
+     */
+    confusedUsPhonetics: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1121,7 +1173,9 @@ export interface WordFieldRefs {
   readonly usPronunciation: Prisma.FieldRef<"Word", 'String'>
   readonly level: Prisma.FieldRef<"Word", 'Int'>
   readonly confusedWords: Prisma.FieldRef<"Word", 'Json'>
-  readonly confusedTranslation: Prisma.FieldRef<"Word", 'Json'>
+  readonly confusedTranslations: Prisma.FieldRef<"Word", 'Json'>
+  readonly confusedUkPhonetics: Prisma.FieldRef<"Word", 'Json'>
+  readonly confusedUsPhonetics: Prisma.FieldRef<"Word", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Word", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Word", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Word", 'DateTime'>
