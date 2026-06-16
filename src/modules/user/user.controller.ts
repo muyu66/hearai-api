@@ -17,8 +17,6 @@ export class UserController {
       wordLevel: user.wordLevel,
       dailyWordCount: user.dailyWordCount,
       pronType: user.pronType,
-      isGoogleUser: user.wechatOpenid != null,
-      isWechatUser: user.googleOpenid != null,
       createdAt: user.createdAt,
     };
   }
@@ -27,13 +25,14 @@ export class UserController {
   async updateProfile(
     @CurrUser() authUser: AuthUser,
     @Body() dto: UpdateUserDto,
-  ): Promise<boolean> {
-    const { wordLevel, dailyWordCount, pronType } = dto;
-    await this.userService.update(authUser.userId, {
-      wordLevel,
-      dailyWordCount,
-      pronType,
-    });
-    return true;
+  ): Promise<UserDto> {
+    const user = await this.userService.update(authUser.userId, dto);
+    return {
+      nickname: user.nickname,
+      wordLevel: user.wordLevel,
+      dailyWordCount: user.dailyWordCount,
+      pronType: user.pronType,
+      createdAt: user.createdAt,
+    };
   }
 }

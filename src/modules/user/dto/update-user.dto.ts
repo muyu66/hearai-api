@@ -14,15 +14,15 @@ export class UpdateUserDto {
   @IsNumber()
   @Min(1)
   @Max(4)
-  wordLevel?: number;
+  wordLevel: number | null;
 
   @IsOptional()
   @IsNumber()
-  @MinLength(1)
-  @MaxLength(100)
-  dailyWordCount?: number;
+  @Min(1)
+  @Max(100)
+  dailyWordCount: number | null;
 
   @IsOptional()
   @IsEnum(PronunciationType)
-  pronType?: PronunciationType;
+  pronType: PronunciationType | null;
 }

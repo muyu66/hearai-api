@@ -21,7 +21,13 @@ export class UserService {
 
     return this.prisma.user.update({
       where: { id },
-      data: dto,
+      data: {
+        ...(dto.wordLevel != null ? { wordLevel: dto.wordLevel } : {}),
+        ...(dto.dailyWordCount != null
+          ? { dailyWordCount: dto.dailyWordCount }
+          : {}),
+        ...(dto.pronType != null ? { pronType: dto.pronType } : {}),
+      },
     });
   }
 }

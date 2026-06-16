@@ -5,7 +5,5 @@ export class UserDto {
   wordLevel: number;
   dailyWordCount: number;
   pronType: PronunciationType;
-  isWechatUser: boolean;
-  isGoogleUser: boolean;
   createdAt: Date;
 }
