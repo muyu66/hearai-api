@@ -10,7 +10,7 @@
  */
 export type * from './models/User.js'
 export type * from './models/Word.js'
-export type * from './models/UserWord.js'
-export type * from './models/UserMasterWord.js'
-export type * from './models/DailyWord.js'
+export type * from './models/UserCustomWord.js'
+export type * from './models/DailyTask.js'
+export type * from './models/DailyTaskWord.js'
 export type * from './commonInputTypes.js'

@@ -22,6 +22,8 @@ enum QuestionMode {
   WORD_TO_TRAN
   // 声音选中文
   SOUND_TO_TRAN
+  // 声音选英文
+  SOUND_TO_WORD
 }
 
 /// 用户表
@@ -58,72 +60,51 @@ model Word {
   /// 英式音标发音地址
   ukPronunciation String? @map("uk_pronunciation") @db.VarChar(255)
   /// 美式音标发音地址
-  uSPronunciation String? @map("us_pronunciation") @db.VarChar(255)
+  usPronunciation String? @map("us_pronunciation") @db.VarChar(255)
   level           Int     @default(1) @map("level") @db.UnsignedTinyInt
 
-  /// 单词向量
-  wordEmbedding        Json? @map("word_embedding")
-  /// 释义向量
-  translationEmbedding Json? @map("translation_embedding")
+  /// 易混淆的单词
+  confusedWords       Json? @map("confused_words")
+  /// 易混淆的中文释义
+  confusedTranslation Json? @map("confused_translation")
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  dailyWords DailyWord[]
+  dailyTaskWords DailyTaskWord[]
 
   /// 同一单词只能有一条记录
   @@unique(word)
   @@map("words")
 }
 
-/// 用户单词
-model UserWord {
-  id          BigInt @id @default(autoincrement()) @db.UnsignedBigInt
-  userId      BigInt @map("user_id") @db.UnsignedBigInt
-  wordId      BigInt @map("word_id") @db.UnsignedBigInt
-  /// 类似于每日单词任务
-  dailyWordId BigInt @map("daily_word_id") @db.UnsignedBigInt
-
-  failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt
-  /// 思考时间 单位ms
-  thinkingTime Int          @default(0) @map("thinking_time") @db.UnsignedInt
-  failedMode   Int          @default(0) @map("failed_mode") @db.UnsignedTinyInt
-  questionMode QuestionMode @map("question_mode")
-
-  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
-
-  /// 同一用户同一单词在同一天只能有一条记录
-  @@unique([userId, wordId, dailyWordId])
-  @@map("user_words")
-}
-
-/// 用户已经掌握的单词
-model UserMasterWord {
-  id     BigInt @id @default(autoincrement()) @db.UnsignedBigInt
-  userId BigInt @map("user_id") @db.UnsignedBigInt
-  wordId BigInt @map("word_id") @db.UnsignedBigInt
+/// 用户自定义的单词
+model UserCustomWord {
+  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  userId    BigInt  @map("user_id") @db.UnsignedBigInt
+  word      String  @db.VarChar(200)
+  /// 用户上报的单词是否已支持在字典里
+  supported Boolean @default(false)
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
   /// 同一用户同一单词只能有一条记录
-  @@unique([userId, wordId])
-  @@map("user_master_words")
+  @@unique([userId, word])
+  @@map("user_custom_words")
 }
 
-/// 每日推送单词
-model DailyWord {
-  id           BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
-  userId       BigInt       @map("user_id") @db.UnsignedBigInt
-  wordId       BigInt       @map("word_id") @db.UnsignedBigInt
-  questionMode QuestionMode @map("question_mode")
-  /// 是否完成今天的任务
-  isFinished   Boolean      @default(false) @map("is_finished")
-  finishedAt   DateTime?    @map("finished_at") @db.DateTime(0)
+/// 每日推送任务
+model DailyTask {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  userId     BigInt    @map("user_id") @db.UnsignedBigInt
+  /// 任务数量
+  taskCount  Int       @default(0) @map("task_count") @db.UnsignedSmallInt
+  /// 本任务是否完成过
+  isFinished Boolean   @default(false) @map("is_finished")
+  finishedAt DateTime? @map("finished_at") @db.DateTime(0)
 
   createdDate String @map("created_date") @db.VarChar(10)
 
@@ -131,10 +112,43 @@ model DailyWord {
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  /// 关联单词
-  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  dailyTaskWords DailyTaskWord[]
 
-  /// 同一用户同一单词同一天同一题型只能有一条记录
+  /// 同一用户同一天只能有一条记录
+  @@unique([userId, createdDate])
+  @@map("daily_tasks")
+}
+
+/// 每日推送任务单词
+model DailyTaskWord {
+  id           BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  dailyTaskId  BigInt       @map("daily_task_id") @db.UnsignedBigInt
+  userId       BigInt       @map("user_id") @db.UnsignedBigInt
+  wordId       BigInt       @map("word_id") @db.UnsignedBigInt
+  questionMode QuestionMode @map("question_mode")
+  /// 选错的次数
+  failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt
+  /// 思考时间 单位ms
+  thinkingTime Int          @default(0) @map("thinking_time") @db.UnsignedInt
+  /// 本单词任务是否已经掌握
+  master       Boolean      @default(false)
+
+  /// 本单词任务是否完成过
+  isFinished Boolean   @default(false) @map("is_finished")
+  finishedAt DateTime? @map("finished_at") @db.DateTime(0)
+
+  createdDate String @map("created_date") @db.VarChar(10)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
+  word      Word      @relation(fields: [wordId], references: [id], onDelete: Cascade)
+  dailyTask DailyTask @relation(fields: [dailyTaskId], references: [id], onDelete: Cascade)
+
+  /// 同一任务同一单词同一题型只能有一条记录
+  @@unique([dailyTaskId, wordId, questionMode])
+  /// 同一用户同一天同一单词同一题型只能有一条记录 (同一用户同一天 = 同一任务)
   @@unique([userId, wordId, createdDate, questionMode])
-  @@map("daily_words")
+  @@map("daily_task_words")
 }

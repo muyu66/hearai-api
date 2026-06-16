@@ -1,4 +1,4 @@
 export interface AuthUser {
-  userId: number;
+  userId: bigint;
   nickname: string;
 }

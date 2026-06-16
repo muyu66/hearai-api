@@ -20,7 +20,8 @@ export type PronunciationType = (typeof PronunciationType)[keyof typeof Pronunci
 export const QuestionMode = {
   TRAN_TO_WORD: 'TRAN_TO_WORD',
   WORD_TO_TRAN: 'WORD_TO_TRAN',
-  SOUND_TO_TRAN: 'SOUND_TO_TRAN'
+  SOUND_TO_TRAN: 'SOUND_TO_TRAN',
+  SOUND_TO_WORD: 'SOUND_TO_WORD'
 } as const
 
 export type QuestionMode = (typeof QuestionMode)[keyof typeof QuestionMode]

@@ -50,17 +50,17 @@ export type User = Prisma.UserModel
  */
 export type Word = Prisma.WordModel
 /**
- * Model UserWord
- * 用户单词
+ * Model UserCustomWord
+ * 用户自定义的单词
  */
-export type UserWord = Prisma.UserWordModel
+export type UserCustomWord = Prisma.UserCustomWordModel
 /**
- * Model UserMasterWord
- * 用户已经掌握的单词
+ * Model DailyTask
+ * 每日推送任务
  */
-export type UserMasterWord = Prisma.UserMasterWordModel
+export type DailyTask = Prisma.DailyTaskModel
 /**
- * Model DailyWord
- * 每日推送单词
+ * Model DailyTaskWord
+ * 每日推送任务单词
  */
-export type DailyWord = Prisma.DailyWordModel
+export type DailyTaskWord = Prisma.DailyTaskWordModel

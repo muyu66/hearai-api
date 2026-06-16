@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: number) {
+  async findById(id: bigint) {
     const user = await this.prisma.user.findFirst({
       where: { id, deletedAt: null },
     });
@@ -16,7 +16,7 @@ export class UserService {
     return user;
   }
 
-  async update(id: number, dto: UpdateUserDto) {
+  async update(id: bigint, dto: UpdateUserDto) {
     await this.findById(id);
 
     return this.prisma.user.update({
