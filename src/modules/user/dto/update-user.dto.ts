@@ -1,12 +1,4 @@
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  Max,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { PronunciationType } from 'src/generated/prisma/enums';
 
 export class UpdateUserDto {
