@@ -126,6 +126,7 @@ model DailyTaskWord {
   dailyTaskId  BigInt       @map("daily_task_id") @db.UnsignedBigInt
   userId       BigInt       @map("user_id") @db.UnsignedBigInt
   wordId       BigInt       @map("word_id") @db.UnsignedBigInt
+  /// 题型
   questionMode QuestionMode @map("question_mode")
   /// 选错的次数
   failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt

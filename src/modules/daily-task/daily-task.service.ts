@@ -6,6 +6,8 @@ import { QuestionMode } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { NextTaskTimeDto, TodayWordDto } from './dto/daily-task.dto';
 import { ReportDailyTaskWordDto } from './dto/report-daily-task-word.dto';
+import { LearningWordService } from './learning-word.service';
+import { ReviewWordService } from './review-word.service';
 
 type WordOptionData = {
   translation?: string | null;
@@ -49,7 +51,11 @@ const QUESTION_CONFIG = {
 export class DailyTaskService {
   private readonly logger = new Logger(DailyTaskService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly learningWordService: LearningWordService,
+    private readonly reviewWordService: ReviewWordService,
+  ) {}
 
   /**
    * 创建今日的整套任务
@@ -61,6 +67,7 @@ export class DailyTaskService {
     userId: bigint,
     today: string,
     dailyWordCount: number,
+    words: { id: bigint; questionMode: QuestionMode }[],
   ): Promise<DailyTask> {
     return this.prisma.$transaction(async (tx) => {
       const dailyTask = await tx.dailyTask.create({
@@ -72,16 +79,6 @@ export class DailyTaskService {
           createdDate: today,
         },
       });
-      const words = await tx.word.findMany({
-        where: {
-          deletedAt: null,
-        },
-        select: {
-          id: true,
-        },
-        take: dailyWordCount,
-        skip: 0,
-      });
       await tx.dailyTaskWord.createMany({
         data: words.map((word) => {
           return {
@@ -89,7 +86,7 @@ export class DailyTaskService {
             userId,
             wordId: word.id,
             // 学习模式 给出 WORD_TO_TRAN
-            questionMode: QuestionMode.WORD_TO_TRAN,
+            questionMode: word.questionMode,
             isFinished: false,
             finishedAt: null,
             createdDate: today,
@@ -103,18 +100,17 @@ export class DailyTaskService {
   }
 
   /**
-   * 创建或获取Task
+   * 获取当前轮Task
    * @param userId
    * @param now
    * @param today
-   * @returns
+   * @returns DailyTask=当前轮正在执行  null=没有当前轮需要后续创建
    */
-  private async findOrCreateTask(
+  private async findCurrentTask(
     userId: bigint,
     now: Date,
     today: string,
-    dailyWordCount: number,
-  ) {
+  ): Promise<DailyTask | null> {
     // 获取用户最新的任务
     const latestTask = await this.prisma.dailyTask.findFirst({
       where: {
@@ -135,8 +131,7 @@ export class DailyTaskService {
         return latestTask;
       }
     }
-    // 创建新的task
-    return await this.createTodayWords(userId, today, dailyWordCount);
+    return null;
   }
 
   /**
@@ -208,6 +203,42 @@ export class DailyTaskService {
   }
 
   /**
+   * 规划今日的单词任务
+   * @param userId
+   * @param level
+   * @param dailyWordCount
+   * @returns
+   */
+  async calcTodayWords(
+    userId: bigint,
+    level: number,
+    dailyWordCount: number,
+  ): Promise<{ id: bigint; questionMode: QuestionMode }[]> {
+    // 先保证复习的数量，剩下的都是学习数量
+
+    const reviewRatio = 0.7; // 复习比例
+    const reviewWordCount = Math.floor(dailyWordCount * reviewRatio);
+
+    const r = await this.reviewWordService.pickReviewWords(
+      userId,
+      level,
+      reviewWordCount,
+    );
+
+    // 每日单词量 - 实际复习量 = 学习数量
+    const learningWordCount = dailyWordCount - r.length;
+
+    const l = await this.learningWordService.pickLearningWords(
+      userId,
+      level,
+      learningWordCount,
+    );
+
+    // 先复习，再学习
+    return [...r, ...l];
+  }
+
+  /**
    * 获取今天的单词
    * @param userId
    * @returns
@@ -222,12 +253,25 @@ export class DailyTaskService {
       },
     });
 
-    const dailyTask = await this.findOrCreateTask(
-      userId,
-      now,
-      today,
-      user.dailyWordCount,
-    );
+    // 获取当前轮Task
+    let dailyTask: DailyTask | null;
+    dailyTask = await this.findCurrentTask(userId, now, today);
+    // 如果没有，则创建本轮Task
+    if (dailyTask == null) {
+      // 计算今日单词
+      const words = await this.calcTodayWords(
+        userId,
+        user.wordLevel,
+        user.dailyWordCount,
+      );
+      // 实际分发任务
+      dailyTask = await this.createTodayWords(
+        userId,
+        today,
+        user.dailyWordCount,
+        words,
+      );
+    }
 
     // 已完成今天的任务
     if (dailyTask.isFinished) {
@@ -294,7 +338,7 @@ export class DailyTaskService {
       const wordModel = dailyTaskWord.word;
 
       const { answers, correctAnswerIndex } = this.buildOptions(
-        config.confused(wordModel),
+        config.confused(wordModel) || [],
         config.answer(wordModel),
         (key) => config.getter(confusedWordMap, key),
       );
