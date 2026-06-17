@@ -13,6 +13,14 @@ type WordOptionData = {
 };
 
 const QUESTION_CONFIG = {
+  [QuestionMode.WORD_TO_TRAN]: {
+    question: (wordModel: Word) => wordModel.word,
+    answer: (wordModel: Word) => wordModel.translation,
+    confused: (wordModel: Word) => wordModel.confusedTranslations as string[],
+    getter: (map: Map<string, WordOptionData>, key: string) =>
+      map.get(key)?.translation,
+  },
+
   [QuestionMode.WORD_TO_SOUND]: {
     question: (wordModel: Word) => wordModel.word,
     answer: (wordModel: Word) => wordModel.usPhonetic,
@@ -80,8 +88,8 @@ export class DailyTaskService {
             dailyTaskId: dailyTask.id,
             userId,
             wordId: word.id,
-            // TODO 计算出来的
-            questionMode: QuestionMode.WORD_TO_SOUND,
+            // 学习模式 给出 WORD_TO_TRAN
+            questionMode: QuestionMode.WORD_TO_TRAN,
             isFinished: false,
             finishedAt: null,
             createdDate: today,

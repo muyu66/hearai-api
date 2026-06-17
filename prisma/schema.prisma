@@ -17,9 +17,10 @@ enum PronunciationType {
 
 /// 英文->音标->中文->英文
 enum QuestionMode {
-  WORD_TO_SOUND
-  SOUND_TO_TRAN
-  TRAN_TO_WORD
+  WORD_TO_TRAN // 学习模式
+  WORD_TO_SOUND // 复习模式
+  SOUND_TO_TRAN // 复习模式
+  TRAN_TO_WORD // 复习模式
 }
 
 /// 用户表
