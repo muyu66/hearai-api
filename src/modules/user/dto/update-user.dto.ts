@@ -6,7 +6,7 @@ export class UpdateUserDto {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  @Max(4)
+  @Max(5)
   wordLevel: number | null;
 
   @IsOptional()
