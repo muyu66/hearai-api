@@ -19,7 +19,7 @@ export class LearningWordService {
     userId: bigint,
     level: number,
     learningWordCount: number,
-  ): Promise<{ id: bigint; questionMode: QuestionMode }[]> {
+  ): Promise<{ id: bigint; word: string; questionMode: QuestionMode }[]> {
     const count = await this.prisma.word.count({
       where: {
         level,
@@ -76,6 +76,7 @@ export class LearningWordService {
             },
             select: {
               id: true,
+              word: true,
             },
             take: MAX_DAILY_WORD_COUNT, // dailyWordCount 最大为100
             skip,
@@ -92,6 +93,7 @@ export class LearningWordService {
       );
       return learningWords.map((word) => ({
         id: word.id,
+        word: word.word,
         questionMode: QuestionMode.WORD_TO_TRAN,
       }));
     }
@@ -106,6 +108,7 @@ export class LearningWordService {
       },
       select: {
         id: true,
+        word: true,
       },
       skip,
       take: MAX_DAILY_WORD_COUNT, // dailyWordCount 最大为100
@@ -121,6 +124,7 @@ export class LearningWordService {
     ]).slice(0, learningWordCount);
     return learningWords.map((word) => ({
       id: word.id,
+      word: word.word,
       questionMode: QuestionMode.WORD_TO_TRAN,
     }));
   }

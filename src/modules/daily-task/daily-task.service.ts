@@ -67,7 +67,7 @@ export class DailyTaskService {
     userId: bigint,
     today: string,
     dailyWordCount: number,
-    words: { id: bigint; questionMode: QuestionMode }[],
+    words: { id: bigint; word: string; questionMode: QuestionMode }[],
   ): Promise<DailyTask> {
     return this.prisma.$transaction(async (tx) => {
       const dailyTask = await tx.dailyTask.create({
@@ -85,6 +85,7 @@ export class DailyTaskService {
             dailyTaskId: dailyTask.id,
             userId,
             wordId: word.id,
+            snapshotWord: word.word,
             // 学习模式 给出 WORD_TO_TRAN
             questionMode: word.questionMode,
             isFinished: false,
@@ -213,7 +214,7 @@ export class DailyTaskService {
     userId: bigint,
     level: number,
     dailyWordCount: number,
-  ): Promise<{ id: bigint; questionMode: QuestionMode }[]> {
+  ): Promise<{ id: bigint; word: string; questionMode: QuestionMode }[]> {
     // 先保证复习的数量，剩下的都是学习数量
 
     const reviewRatio = 0.7; // 复习比例
@@ -306,7 +307,6 @@ export class DailyTaskService {
           in: confusedAllWords,
         },
       },
-      take: 10,
       select: {
         word: true,
         translation: true,
@@ -383,7 +383,6 @@ export class DailyTaskService {
           finishedAt: new Date(),
           failedCount: dto.failedCount,
           thinkingTime: dto.thinkingTime,
-          master: dto.master,
         },
       });
 

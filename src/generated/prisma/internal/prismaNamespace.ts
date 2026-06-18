@@ -848,10 +848,10 @@ export const DailyTaskWordScalarFieldEnum = {
   dailyTaskId: 'dailyTaskId',
   userId: 'userId',
   wordId: 'wordId',
+  snapshotWord: 'snapshotWord',
   questionMode: 'questionMode',
   failedCount: 'failedCount',
   thinkingTime: 'thinkingTime',
-  master: 'master',
   isFinished: 'isFinished',
   finishedAt: 'finishedAt',
   createdDate: 'createdDate',
@@ -941,6 +941,7 @@ export type DailyTaskOrderByRelevanceFieldEnum = (typeof DailyTaskOrderByRelevan
 
 
 export const DailyTaskWordOrderByRelevanceFieldEnum = {
+  snapshotWord: 'snapshotWord',
   createdDate: 'createdDate'
 } as const
 

@@ -126,14 +126,14 @@ model DailyTaskWord {
   dailyTaskId  BigInt       @map("daily_task_id") @db.UnsignedBigInt
   userId       BigInt       @map("user_id") @db.UnsignedBigInt
   wordId       BigInt       @map("word_id") @db.UnsignedBigInt
+  /// 冗余
+  snapshotWord String       @map("snapshot_word") @db.VarChar(200)
   /// 题型
   questionMode QuestionMode @map("question_mode")
   /// 选错的次数
   failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt
   /// 思考时间 单位ms
   thinkingTime Int          @default(0) @map("thinking_time") @db.UnsignedInt
-  /// 本单词任务是否已经掌握
-  master       Boolean      @default(false)
 
   /// 本单词任务是否完成过
   isFinished Boolean   @default(false) @map("is_finished")

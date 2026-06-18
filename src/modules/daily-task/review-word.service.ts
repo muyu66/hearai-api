@@ -5,6 +5,7 @@ import { QuestionMode } from 'src/generated/prisma/enums';
 
 type DailyWordHistory = {
   wordId: bigint;
+  snapshotWord: string;
   createdDate: string; // YYYY-MM-DD
   failedCount: number;
   thinkingTime: number; // ms
@@ -13,6 +14,7 @@ type DailyWordHistory = {
 
 type WordUrgencyScore = {
   wordId: bigint;
+  word: string;
   // 复习紧迫度
   urgency: number;
   // 预测错误风险
@@ -32,6 +34,7 @@ type WordUrgencyScore = {
 type DailyRecordsMap = Map<
   string,
   {
+    word: string;
     createdDate: string;
     failedCount: number;
     thinkingTime: number;
@@ -50,11 +53,12 @@ export class ReviewWordService {
     userId: bigint,
     level: number,
     limit = 10,
-  ): Promise<{ id: bigint; questionMode: QuestionMode }[]> {
+  ): Promise<{ id: bigint; word: string; questionMode: QuestionMode }[]> {
     const scores = await this.rankReviewWords(userId, level);
 
     return scores.slice(0, limit).map((item) => ({
       id: item.wordId,
+      word: item.word,
       // 用该单词最容易错的其它题型
       questionMode: sample(
         without(Object.values(QuestionMode), item.weakestQuestionMode),
@@ -69,7 +73,7 @@ export class ReviewWordService {
     userId: bigint,
     level: number,
   ): Promise<WordUrgencyScore[]> {
-    const history = await this.prisma.dailyTaskWord.findMany({
+    const histories = await this.prisma.dailyTaskWord.findMany({
       where: {
         userId,
         word: {
@@ -80,6 +84,7 @@ export class ReviewWordService {
       },
       select: {
         wordId: true,
+        snapshotWord: true,
         createdDate: true,
         failedCount: true,
         thinkingTime: true,
@@ -95,9 +100,9 @@ export class ReviewWordService {
       ],
     });
 
-    if (history.length === 0) return [];
+    if (histories.length === 0) return [];
 
-    const grouped = this.groupByWordAndDate(history);
+    const grouped = this.groupByWordAndDate(histories);
     const today = this.parseYmd(this.formatYmd(new Date()));
 
     const scores: WordUrgencyScore[] = [];
@@ -134,6 +139,7 @@ export class ReviewWordService {
           failedCount: record.failedCount,
           thinkingTime: record.thinkingTime,
           questionMode: record.questionMode,
+          word: record.snapshotWord,
         });
       }
     }
@@ -224,6 +230,7 @@ export class ReviewWordService {
 
     return {
       wordId,
+      word: dailyRecords[0].word,
       urgency,
       predictedFailRisk,
       predictedThinkingTime,

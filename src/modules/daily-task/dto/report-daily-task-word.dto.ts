@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class ReportDailyTaskWordDto {
   @IsString()
@@ -8,6 +8,4 @@ export class ReportDailyTaskWordDto {
   /// 思考时间 单位ms
   @IsNumber()
   thinkingTime: number;
-  @IsBoolean()
-  master: boolean;
 }

@@ -49,10 +49,10 @@ export type DailyTaskWordMinAggregateOutputType = {
   dailyTaskId: bigint | null
   userId: bigint | null
   wordId: bigint | null
+  snapshotWord: string | null
   questionMode: $Enums.QuestionMode | null
   failedCount: number | null
   thinkingTime: number | null
-  master: boolean | null
   isFinished: boolean | null
   finishedAt: Date | null
   createdDate: string | null
@@ -66,10 +66,10 @@ export type DailyTaskWordMaxAggregateOutputType = {
   dailyTaskId: bigint | null
   userId: bigint | null
   wordId: bigint | null
+  snapshotWord: string | null
   questionMode: $Enums.QuestionMode | null
   failedCount: number | null
   thinkingTime: number | null
-  master: boolean | null
   isFinished: boolean | null
   finishedAt: Date | null
   createdDate: string | null
@@ -83,10 +83,10 @@ export type DailyTaskWordCountAggregateOutputType = {
   dailyTaskId: number
   userId: number
   wordId: number
+  snapshotWord: number
   questionMode: number
   failedCount: number
   thinkingTime: number
-  master: number
   isFinished: number
   finishedAt: number
   createdDate: number
@@ -120,10 +120,10 @@ export type DailyTaskWordMinAggregateInputType = {
   dailyTaskId?: true
   userId?: true
   wordId?: true
+  snapshotWord?: true
   questionMode?: true
   failedCount?: true
   thinkingTime?: true
-  master?: true
   isFinished?: true
   finishedAt?: true
   createdDate?: true
@@ -137,10 +137,10 @@ export type DailyTaskWordMaxAggregateInputType = {
   dailyTaskId?: true
   userId?: true
   wordId?: true
+  snapshotWord?: true
   questionMode?: true
   failedCount?: true
   thinkingTime?: true
-  master?: true
   isFinished?: true
   finishedAt?: true
   createdDate?: true
@@ -154,10 +154,10 @@ export type DailyTaskWordCountAggregateInputType = {
   dailyTaskId?: true
   userId?: true
   wordId?: true
+  snapshotWord?: true
   questionMode?: true
   failedCount?: true
   thinkingTime?: true
-  master?: true
   isFinished?: true
   finishedAt?: true
   createdDate?: true
@@ -258,10 +258,10 @@ export type DailyTaskWordGroupByOutputType = {
   dailyTaskId: bigint
   userId: bigint
   wordId: bigint
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount: number
   thinkingTime: number
-  master: boolean
   isFinished: boolean
   finishedAt: Date | null
   createdDate: string
@@ -298,10 +298,10 @@ export type DailyTaskWordWhereInput = {
   dailyTaskId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   userId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   wordId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
+  snapshotWord?: Prisma.StringFilter<"DailyTaskWord"> | string
   questionMode?: Prisma.EnumQuestionModeFilter<"DailyTaskWord"> | $Enums.QuestionMode
   failedCount?: Prisma.IntFilter<"DailyTaskWord"> | number
   thinkingTime?: Prisma.IntFilter<"DailyTaskWord"> | number
-  master?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   isFinished?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   finishedAt?: Prisma.DateTimeNullableFilter<"DailyTaskWord"> | Date | string | null
   createdDate?: Prisma.StringFilter<"DailyTaskWord"> | string
@@ -317,10 +317,10 @@ export type DailyTaskWordOrderByWithRelationInput = {
   dailyTaskId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   wordId?: Prisma.SortOrder
+  snapshotWord?: Prisma.SortOrder
   questionMode?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
   thinkingTime?: Prisma.SortOrder
-  master?: Prisma.SortOrder
   isFinished?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdDate?: Prisma.SortOrder
@@ -342,10 +342,10 @@ export type DailyTaskWordWhereUniqueInput = Prisma.AtLeast<{
   dailyTaskId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   userId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   wordId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
+  snapshotWord?: Prisma.StringFilter<"DailyTaskWord"> | string
   questionMode?: Prisma.EnumQuestionModeFilter<"DailyTaskWord"> | $Enums.QuestionMode
   failedCount?: Prisma.IntFilter<"DailyTaskWord"> | number
   thinkingTime?: Prisma.IntFilter<"DailyTaskWord"> | number
-  master?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   isFinished?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   finishedAt?: Prisma.DateTimeNullableFilter<"DailyTaskWord"> | Date | string | null
   createdDate?: Prisma.StringFilter<"DailyTaskWord"> | string
@@ -361,10 +361,10 @@ export type DailyTaskWordOrderByWithAggregationInput = {
   dailyTaskId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   wordId?: Prisma.SortOrder
+  snapshotWord?: Prisma.SortOrder
   questionMode?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
   thinkingTime?: Prisma.SortOrder
-  master?: Prisma.SortOrder
   isFinished?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdDate?: Prisma.SortOrder
@@ -386,10 +386,10 @@ export type DailyTaskWordScalarWhereWithAggregatesInput = {
   dailyTaskId?: Prisma.BigIntWithAggregatesFilter<"DailyTaskWord"> | bigint | number
   userId?: Prisma.BigIntWithAggregatesFilter<"DailyTaskWord"> | bigint | number
   wordId?: Prisma.BigIntWithAggregatesFilter<"DailyTaskWord"> | bigint | number
+  snapshotWord?: Prisma.StringWithAggregatesFilter<"DailyTaskWord"> | string
   questionMode?: Prisma.EnumQuestionModeWithAggregatesFilter<"DailyTaskWord"> | $Enums.QuestionMode
   failedCount?: Prisma.IntWithAggregatesFilter<"DailyTaskWord"> | number
   thinkingTime?: Prisma.IntWithAggregatesFilter<"DailyTaskWord"> | number
-  master?: Prisma.BoolWithAggregatesFilter<"DailyTaskWord"> | boolean
   isFinished?: Prisma.BoolWithAggregatesFilter<"DailyTaskWord"> | boolean
   finishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DailyTaskWord"> | Date | string | null
   createdDate?: Prisma.StringWithAggregatesFilter<"DailyTaskWord"> | string
@@ -401,10 +401,10 @@ export type DailyTaskWordScalarWhereWithAggregatesInput = {
 export type DailyTaskWordCreateInput = {
   id?: bigint | number
   userId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -420,10 +420,10 @@ export type DailyTaskWordUncheckedCreateInput = {
   dailyTaskId: bigint | number
   userId: bigint | number
   wordId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -435,10 +435,10 @@ export type DailyTaskWordUncheckedCreateInput = {
 export type DailyTaskWordUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -454,10 +454,10 @@ export type DailyTaskWordUncheckedUpdateInput = {
   dailyTaskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   wordId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -471,10 +471,10 @@ export type DailyTaskWordCreateManyInput = {
   dailyTaskId: bigint | number
   userId: bigint | number
   wordId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -486,10 +486,10 @@ export type DailyTaskWordCreateManyInput = {
 export type DailyTaskWordUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -503,10 +503,10 @@ export type DailyTaskWordUncheckedUpdateManyInput = {
   dailyTaskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   wordId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -549,10 +549,10 @@ export type DailyTaskWordCountOrderByAggregateInput = {
   dailyTaskId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   wordId?: Prisma.SortOrder
+  snapshotWord?: Prisma.SortOrder
   questionMode?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
   thinkingTime?: Prisma.SortOrder
-  master?: Prisma.SortOrder
   isFinished?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   createdDate?: Prisma.SortOrder
@@ -575,10 +575,10 @@ export type DailyTaskWordMaxOrderByAggregateInput = {
   dailyTaskId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   wordId?: Prisma.SortOrder
+  snapshotWord?: Prisma.SortOrder
   questionMode?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
   thinkingTime?: Prisma.SortOrder
-  master?: Prisma.SortOrder
   isFinished?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   createdDate?: Prisma.SortOrder
@@ -592,10 +592,10 @@ export type DailyTaskWordMinOrderByAggregateInput = {
   dailyTaskId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   wordId?: Prisma.SortOrder
+  snapshotWord?: Prisma.SortOrder
   questionMode?: Prisma.SortOrder
   failedCount?: Prisma.SortOrder
   thinkingTime?: Prisma.SortOrder
-  master?: Prisma.SortOrder
   isFinished?: Prisma.SortOrder
   finishedAt?: Prisma.SortOrder
   createdDate?: Prisma.SortOrder
@@ -704,10 +704,10 @@ export type EnumQuestionModeFieldUpdateOperationsInput = {
 export type DailyTaskWordCreateWithoutWordInput = {
   id?: bigint | number
   userId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -721,10 +721,10 @@ export type DailyTaskWordUncheckedCreateWithoutWordInput = {
   id?: bigint | number
   dailyTaskId: bigint | number
   userId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -767,10 +767,10 @@ export type DailyTaskWordScalarWhereInput = {
   dailyTaskId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   userId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
   wordId?: Prisma.BigIntFilter<"DailyTaskWord"> | bigint | number
+  snapshotWord?: Prisma.StringFilter<"DailyTaskWord"> | string
   questionMode?: Prisma.EnumQuestionModeFilter<"DailyTaskWord"> | $Enums.QuestionMode
   failedCount?: Prisma.IntFilter<"DailyTaskWord"> | number
   thinkingTime?: Prisma.IntFilter<"DailyTaskWord"> | number
-  master?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   isFinished?: Prisma.BoolFilter<"DailyTaskWord"> | boolean
   finishedAt?: Prisma.DateTimeNullableFilter<"DailyTaskWord"> | Date | string | null
   createdDate?: Prisma.StringFilter<"DailyTaskWord"> | string
@@ -782,10 +782,10 @@ export type DailyTaskWordScalarWhereInput = {
 export type DailyTaskWordCreateWithoutDailyTaskInput = {
   id?: bigint | number
   userId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -799,10 +799,10 @@ export type DailyTaskWordUncheckedCreateWithoutDailyTaskInput = {
   id?: bigint | number
   userId: bigint | number
   wordId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -841,10 +841,10 @@ export type DailyTaskWordCreateManyWordInput = {
   id?: bigint | number
   dailyTaskId: bigint | number
   userId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -856,10 +856,10 @@ export type DailyTaskWordCreateManyWordInput = {
 export type DailyTaskWordUpdateWithoutWordInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -873,10 +873,10 @@ export type DailyTaskWordUncheckedUpdateWithoutWordInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   dailyTaskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -889,10 +889,10 @@ export type DailyTaskWordUncheckedUpdateManyWithoutWordInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   dailyTaskId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -905,10 +905,10 @@ export type DailyTaskWordCreateManyDailyTaskInput = {
   id?: bigint | number
   userId: bigint | number
   wordId: bigint | number
+  snapshotWord: string
   questionMode: $Enums.QuestionMode
   failedCount?: number
   thinkingTime?: number
-  master?: boolean
   isFinished?: boolean
   finishedAt?: Date | string | null
   createdDate: string
@@ -920,10 +920,10 @@ export type DailyTaskWordCreateManyDailyTaskInput = {
 export type DailyTaskWordUpdateWithoutDailyTaskInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -937,10 +937,10 @@ export type DailyTaskWordUncheckedUpdateWithoutDailyTaskInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   wordId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -953,10 +953,10 @@ export type DailyTaskWordUncheckedUpdateManyWithoutDailyTaskInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   userId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   wordId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  snapshotWord?: Prisma.StringFieldUpdateOperationsInput | string
   questionMode?: Prisma.EnumQuestionModeFieldUpdateOperationsInput | $Enums.QuestionMode
   failedCount?: Prisma.IntFieldUpdateOperationsInput | number
   thinkingTime?: Prisma.IntFieldUpdateOperationsInput | number
-  master?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFinished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   finishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdDate?: Prisma.StringFieldUpdateOperationsInput | string
@@ -972,10 +972,10 @@ export type DailyTaskWordSelect<ExtArgs extends runtime.Types.Extensions.Interna
   dailyTaskId?: boolean
   userId?: boolean
   wordId?: boolean
+  snapshotWord?: boolean
   questionMode?: boolean
   failedCount?: boolean
   thinkingTime?: boolean
-  master?: boolean
   isFinished?: boolean
   finishedAt?: boolean
   createdDate?: boolean
@@ -993,10 +993,10 @@ export type DailyTaskWordSelectScalar = {
   dailyTaskId?: boolean
   userId?: boolean
   wordId?: boolean
+  snapshotWord?: boolean
   questionMode?: boolean
   failedCount?: boolean
   thinkingTime?: boolean
-  master?: boolean
   isFinished?: boolean
   finishedAt?: boolean
   createdDate?: boolean
@@ -1005,7 +1005,7 @@ export type DailyTaskWordSelectScalar = {
   deletedAt?: boolean
 }
 
-export type DailyTaskWordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyTaskId" | "userId" | "wordId" | "questionMode" | "failedCount" | "thinkingTime" | "master" | "isFinished" | "finishedAt" | "createdDate" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["dailyTaskWord"]>
+export type DailyTaskWordOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dailyTaskId" | "userId" | "wordId" | "snapshotWord" | "questionMode" | "failedCount" | "thinkingTime" | "isFinished" | "finishedAt" | "createdDate" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["dailyTaskWord"]>
 export type DailyTaskWordInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   word?: boolean | Prisma.WordDefaultArgs<ExtArgs>
   dailyTask?: boolean | Prisma.DailyTaskDefaultArgs<ExtArgs>
@@ -1022,6 +1022,13 @@ export type $DailyTaskWordPayload<ExtArgs extends runtime.Types.Extensions.Inter
     dailyTaskId: bigint
     userId: bigint
     wordId: bigint
+    /**
+     * 冗余
+     */
+    snapshotWord: string
+    /**
+     * 题型
+     */
     questionMode: $Enums.QuestionMode
     /**
      * 选错的次数
@@ -1031,10 +1038,6 @@ export type $DailyTaskWordPayload<ExtArgs extends runtime.Types.Extensions.Inter
      * 思考时间 单位ms
      */
     thinkingTime: number
-    /**
-     * 本单词任务是否已经掌握
-     */
-    master: boolean
     /**
      * 本单词任务是否完成过
      */
@@ -1419,10 +1422,10 @@ export interface DailyTaskWordFieldRefs {
   readonly dailyTaskId: Prisma.FieldRef<"DailyTaskWord", 'BigInt'>
   readonly userId: Prisma.FieldRef<"DailyTaskWord", 'BigInt'>
   readonly wordId: Prisma.FieldRef<"DailyTaskWord", 'BigInt'>
+  readonly snapshotWord: Prisma.FieldRef<"DailyTaskWord", 'String'>
   readonly questionMode: Prisma.FieldRef<"DailyTaskWord", 'QuestionMode'>
   readonly failedCount: Prisma.FieldRef<"DailyTaskWord", 'Int'>
   readonly thinkingTime: Prisma.FieldRef<"DailyTaskWord", 'Int'>
-  readonly master: Prisma.FieldRef<"DailyTaskWord", 'Boolean'>
   readonly isFinished: Prisma.FieldRef<"DailyTaskWord", 'Boolean'>
   readonly finishedAt: Prisma.FieldRef<"DailyTaskWord", 'DateTime'>
   readonly createdDate: Prisma.FieldRef<"DailyTaskWord", 'String'>
