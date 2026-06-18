@@ -5,6 +5,7 @@ import { UserModule } from '../user/user.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PrismaService } from '../../database/prisma.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PrismaService } from '../../database/prisma.service';
       signOptions: { expiresIn: '2d' as const },
     }),
     UserModule,
+    HttpModule,
   ],
   controllers: [],
   providers: [PrismaService, AuthService, JwtStrategy],

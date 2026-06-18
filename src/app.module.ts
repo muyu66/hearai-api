@@ -6,9 +6,10 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { AuthModule } from './modules/auth/auth.module';
 import { DailyTaskModule } from './modules/daily-task/daily-task.module';
 import { UserModule } from './modules/user/user.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, DailyTaskModule],
+  imports: [AuthModule, UserModule, DailyTaskModule, ConfigModule.forRoot()],
   providers: [
     {
       provide: APP_GUARD,
