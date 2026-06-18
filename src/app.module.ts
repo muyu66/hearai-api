@@ -9,7 +9,12 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, UserModule, DailyTaskModule, ConfigModule.forRoot()],
+  imports: [
+    AuthModule,
+    UserModule,
+    DailyTaskModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+  ],
   providers: [
     {
       provide: APP_GUARD,

@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { SignInfo } from './dto/sign-info.dto';
 
 @Controller('api/auth')
 export class AuthController {
@@ -11,7 +12,7 @@ export class AuthController {
     body: {
       code: string;
     },
-  ): Promise<{ accessToken: string; newUser: boolean }> {
+  ): Promise<SignInfo> {
     return this.authService.signUpWechat(body.code);
   }
 
@@ -21,7 +22,7 @@ export class AuthController {
     body: {
       idToken: string;
     },
-  ): Promise<{ accessToken: string; newUser: boolean }> {
+  ): Promise<SignInfo> {
     return this.authService.signUpGoogle(body.idToken);
   }
 }

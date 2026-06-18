@@ -11,6 +11,7 @@ import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { OAuth2Client } from 'google-auth-library';
+import { SignInfo } from './dto/sign-info.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,9 +32,7 @@ export class AuthService {
     this.googleClient = new OAuth2Client(this.googleClientId);
   }
 
-  async signUpWechat(
-    code: string,
-  ): Promise<{ accessToken: string; newUser: boolean }> {
+  async signUpWechat(code: string): Promise<SignInfo> {
     if (code == null || code === '') {
       throw new BadRequestException('微信授权码不能为空');
     }
@@ -56,9 +55,7 @@ export class AuthService {
     return { accessToken, newUser };
   }
 
-  async signUpGoogle(
-    idToken: string,
-  ): Promise<{ accessToken: string; newUser: boolean }> {
+  async signUpGoogle(idToken: string): Promise<SignInfo> {
     // 验证 Google token
     const ticket = await this.googleClient.verifyIdToken({
       idToken,
