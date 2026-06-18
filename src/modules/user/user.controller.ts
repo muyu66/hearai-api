@@ -11,7 +11,7 @@ export class UserController {
 
   @Get('me')
   async getProfile(@CurrUser() authUser: AuthUser): Promise<UserDto> {
-    const user = await this.userService.findById(authUser.userId);
+    const user = await this.userService.findById(BigInt(authUser.userId));
     return {
       nickname: user.nickname,
       wordLevel: user.wordLevel,
@@ -26,7 +26,7 @@ export class UserController {
     @CurrUser() authUser: AuthUser,
     @Body() dto: UpdateUserDto,
   ): Promise<UserDto> {
-    const user = await this.userService.update(authUser.userId, dto);
+    const user = await this.userService.update(BigInt(authUser.userId), dto);
     return {
       nickname: user.nickname,
       wordLevel: user.wordLevel,

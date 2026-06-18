@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -15,6 +16,7 @@ import { SignInfo } from './dto/sign-info.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   private readonly wechatAppId: string;
   private readonly wechatSecret: string;
   private readonly googleClientId: string;
@@ -91,7 +93,10 @@ export class AuthService {
       }>(tokenUrl),
     );
     if (tokenRes.data.errcode > 0) {
-      throw new UnauthorizedException('微信授权失败');
+      this.logger.error(tokenRes.data);
+      throw new UnauthorizedException(
+        `微信授权失败 code=${code} wechatAppId=${this.wechatAppId}`,
+      );
     }
     return {
       accessToken: tokenRes.data.access_token,
@@ -105,7 +110,7 @@ export class AuthService {
    */
   private async buildToken(user: User): Promise<string> {
     return this.jwtService.signAsync<AuthUser>({
-      userId: user.id,
+      userId: user.id.toString(),
       nickname: user.nickname,
       isWechatUser: user.wechatOpenid != null,
       isGoogleUser: user.googleOpenid != null,

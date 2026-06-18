@@ -11,14 +11,14 @@ export class DailyTaskController {
 
   @Get('today-words')
   async getTodayWords(@CurrUser() authUser: AuthUser): Promise<TodayWordDto[]> {
-    return this.dailyTaskService.getTodayWords(authUser.userId);
+    return this.dailyTaskService.getTodayWords(BigInt(authUser.userId));
   }
 
   @Get('next-task-time')
   async getNextTaskTime(
     @CurrUser() authUser: AuthUser,
   ): Promise<NextTaskTimeDto> {
-    return this.dailyTaskService.getNextTaskTime(authUser.userId);
+    return this.dailyTaskService.getNextTaskTime(BigInt(authUser.userId));
   }
 
   @Post(':taskId/report')
@@ -27,6 +27,10 @@ export class DailyTaskController {
     @Body() body: ReportDailyTaskWordDto,
     @CurrUser() authUser: AuthUser,
   ): Promise<void> {
-    await this.dailyTaskService.report(BigInt(taskId), body, authUser.userId);
+    await this.dailyTaskService.report(
+      BigInt(taskId),
+      body,
+      BigInt(authUser.userId),
+    );
   }
 }
