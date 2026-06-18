@@ -5,8 +5,7 @@ export class TodayWordDto {
   taskId: string;
   questionMode: QuestionMode;
   question: string;
-  ukPronunciation: string | null;
-  usPronunciation: string | null;
+  pronunciationUrl: string | null;
   answers: string[];
   correctAnswerIndex: number;
 }

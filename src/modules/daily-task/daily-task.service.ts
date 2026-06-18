@@ -2,16 +2,17 @@ import { Injectable, Logger } from '@nestjs/common';
 import { differenceInHours, format } from 'date-fns';
 import { randomInt, shuffle } from 'es-toolkit';
 import { DailyTask, Word } from 'src/generated/prisma/client';
-import { QuestionMode } from 'src/generated/prisma/enums';
+import { PronunciationType, QuestionMode } from 'src/generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { NextTaskTimeDto, TodayWordDto } from './dto/daily-task.dto';
 import { ReportDailyTaskWordDto } from './dto/report-daily-task-word.dto';
 import { LearningWordService } from './learning-word.service';
 import { ReviewWordService } from './review-word.service';
+import { OssService } from 'src/common/providers/oss.provider';
 
 type WordOptionData = {
   translation?: string | null;
-  usPhonetic?: string | null;
+  phonetic?: string | null;
 };
 
 const QUESTION_CONFIG = {
@@ -28,7 +29,7 @@ const QUESTION_CONFIG = {
     answer: (wordModel: Word) => wordModel.usPhonetic,
     confused: (wordModel: Word) => wordModel.confusedUsPhonetics as string[],
     getter: (map: Map<string, WordOptionData>, key: string) =>
-      map.get(key)?.usPhonetic,
+      map.get(key)?.phonetic,
   },
 
   [QuestionMode.SOUND_TO_TRAN]: {
@@ -55,7 +56,153 @@ export class DailyTaskService {
     private readonly prisma: PrismaService,
     private readonly learningWordService: LearningWordService,
     private readonly reviewWordService: ReviewWordService,
+    private readonly ossService: OssService,
   ) {}
+
+  /**
+   * 获取今天的单词
+   * @param userId
+   * @returns
+   */
+  async getTodayWords(userId: bigint): Promise<TodayWordDto[]> {
+    const now = new Date();
+    const today = format(now, 'yyyy-MM-dd');
+
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
+
+    // 获取当前轮Task
+    let dailyTask: DailyTask | null;
+    dailyTask = await this.findCurrentTask(userId, now, today);
+    // 如果没有，则创建本轮Task
+    if (dailyTask == null) {
+      // 计算今日单词
+      const words = await this.calcTodayWords(
+        userId,
+        user.wordLevel,
+        user.dailyWordCount,
+      );
+      // 实际分发任务
+      dailyTask = await this.createTodayWords(
+        userId,
+        today,
+        user.dailyWordCount,
+        words,
+      );
+    }
+
+    // 已完成今天的任务
+    if (dailyTask.isFinished) {
+      return [];
+    }
+
+    const dailyTaskWords = await this.prisma.dailyTaskWord.findMany({
+      where: {
+        dailyTaskId: dailyTask.id,
+        deletedAt: null,
+        isFinished: false,
+      },
+      include: {
+        word: true,
+      },
+    });
+
+    // 批量获取全部易混淆单词
+    const confusedAllWords = [
+      ...new Set(
+        dailyTaskWords.flatMap((item) => [
+          ...((item.word.confusedWords as string[]) ?? []),
+          ...((item.word.confusedTranslations as string[]) ?? []),
+          ...((item.word.confusedUsPhonetics as string[]) ?? []),
+        ]),
+      ),
+    ];
+    // 获取全部易混淆单词模型
+    const confusedAllWordModels = await this.prisma.word.findMany({
+      where: {
+        word: {
+          in: confusedAllWords,
+        },
+      },
+      select: {
+        word: true,
+        translation: true,
+        usPhonetic: true,
+        ukPhonetic: true,
+      },
+    });
+    // 缓存
+    const confusedWordMap = new Map<string, WordOptionData>();
+    for (const item of confusedAllWordModels) {
+      if (!item.word) continue;
+      confusedWordMap.set(item.word, {
+        translation: item.translation,
+        phonetic:
+          user.pronType === PronunciationType.US
+            ? item.usPhonetic
+            : item.ukPhonetic,
+      });
+    }
+
+    const pronunciations = await Promise.all(
+      dailyTaskWords.map(async (dailyTaskWord) => {
+        const wordModel = dailyTaskWord.word;
+
+        let pronunciationUrl: string | null = null;
+        const pronunciation =
+          user.pronType === PronunciationType.US
+            ? wordModel.usPronunciation
+            : wordModel.ukPronunciation;
+        if (pronunciation) {
+          pronunciationUrl =
+            await this.ossService.generateSignatureUrl(pronunciation);
+        }
+        return {
+          dailyTaskWordId: dailyTaskWord.id,
+          pronunciationUrl,
+        };
+      }),
+    );
+
+    // 转换格式
+    const res: TodayWordDto[] = [];
+    for (const dailyTaskWord of dailyTaskWords) {
+      const config = QUESTION_CONFIG[dailyTaskWord.questionMode];
+
+      if (!config) {
+        this.logger.error(
+          `Invalid question mode: ${dailyTaskWord.questionMode}`,
+        );
+        continue;
+      }
+
+      const wordModel = dailyTaskWord.word;
+
+      const { answers, correctAnswerIndex } = this.buildOptions(
+        config.confused(wordModel) || [],
+        config.answer(wordModel),
+        (key) => config.getter(confusedWordMap, key),
+      );
+
+      const pronunciationUrl =
+        pronunciations.find((item) => item.dailyTaskWordId === dailyTaskWord.id)
+          ?.pronunciationUrl ?? null;
+
+      res.push({
+        id: dailyTaskWord.id.toString(),
+        taskId: dailyTaskWord.dailyTaskId.toString(),
+        questionMode: dailyTaskWord.questionMode,
+        question: config.question(wordModel),
+        pronunciationUrl,
+        answers,
+        correctAnswerIndex,
+      });
+    }
+    return res;
+  }
 
   /**
    * 创建今日的整套任务
@@ -237,124 +384,6 @@ export class DailyTaskService {
 
     // 先复习，再学习
     return [...r, ...l];
-  }
-
-  /**
-   * 获取今天的单词
-   * @param userId
-   * @returns
-   */
-  async getTodayWords(userId: bigint): Promise<TodayWordDto[]> {
-    const now = new Date();
-    const today = format(now, 'yyyy-MM-dd');
-
-    const user = await this.prisma.user.findUniqueOrThrow({
-      where: {
-        id: userId,
-      },
-    });
-
-    // 获取当前轮Task
-    let dailyTask: DailyTask | null;
-    dailyTask = await this.findCurrentTask(userId, now, today);
-    // 如果没有，则创建本轮Task
-    if (dailyTask == null) {
-      // 计算今日单词
-      const words = await this.calcTodayWords(
-        userId,
-        user.wordLevel,
-        user.dailyWordCount,
-      );
-      // 实际分发任务
-      dailyTask = await this.createTodayWords(
-        userId,
-        today,
-        user.dailyWordCount,
-        words,
-      );
-    }
-
-    // 已完成今天的任务
-    if (dailyTask.isFinished) {
-      return [];
-    }
-
-    const dailyTaskWords = await this.prisma.dailyTaskWord.findMany({
-      where: {
-        dailyTaskId: dailyTask.id,
-        deletedAt: null,
-        isFinished: false,
-      },
-      include: {
-        word: true,
-      },
-    });
-
-    // 批量获取全部易混淆单词
-    const confusedAllWords = [
-      ...new Set(
-        dailyTaskWords.flatMap((item) => [
-          ...((item.word.confusedWords as string[]) ?? []),
-          ...((item.word.confusedTranslations as string[]) ?? []),
-          ...((item.word.confusedUsPhonetics as string[]) ?? []),
-        ]),
-      ),
-    ];
-    // 获取全部易混淆单词模型
-    const confusedAllWordModels = await this.prisma.word.findMany({
-      where: {
-        word: {
-          in: confusedAllWords,
-        },
-      },
-      select: {
-        word: true,
-        translation: true,
-        usPhonetic: true,
-      },
-    });
-    // 缓存
-    const confusedWordMap = new Map<string, WordOptionData>();
-    for (const item of confusedAllWordModels) {
-      if (!item.word) continue;
-      confusedWordMap.set(item.word, {
-        translation: item.translation,
-        usPhonetic: item.usPhonetic,
-      });
-    }
-
-    // 转换格式
-    const res: TodayWordDto[] = [];
-    for (const dailyTaskWord of dailyTaskWords) {
-      const config = QUESTION_CONFIG[dailyTaskWord.questionMode];
-
-      if (!config) {
-        this.logger.error(
-          `Invalid question mode: ${dailyTaskWord.questionMode}`,
-        );
-        continue;
-      }
-
-      const wordModel = dailyTaskWord.word;
-
-      const { answers, correctAnswerIndex } = this.buildOptions(
-        config.confused(wordModel) || [],
-        config.answer(wordModel),
-        (key) => config.getter(confusedWordMap, key),
-      );
-
-      res.push({
-        id: dailyTaskWord.id.toString(),
-        taskId: dailyTaskWord.dailyTaskId.toString(),
-        questionMode: dailyTaskWord.questionMode,
-        question: config.question(wordModel),
-        ukPronunciation: wordModel.ukPronunciation,
-        usPronunciation: wordModel.usPronunciation,
-        answers,
-        correctAnswerIndex,
-      });
-    }
-    return res;
   }
 
   /**
