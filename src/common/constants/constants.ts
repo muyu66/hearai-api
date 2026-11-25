@@ -1,2 +1,13 @@
 export const TOKEN_KEY = 'hearai-token';
-export const MAX_DAILY_WORD_COUNT = 100;
+
+export const SPEAKERS = [
+  'Ryan',
+  'Aiden',
+  'Vivian',
+  'Serena',
+  'Uncle_Fu',
+  'Dylan',
+  'Eric',
+  'Ono_Anna',
+  'Sohee',
+];

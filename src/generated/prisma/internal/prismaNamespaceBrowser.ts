@@ -52,10 +52,11 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Word: 'Word',
-  UserCustomWord: 'UserCustomWord',
-  DailyTask: 'DailyTask',
-  DailyTaskWord: 'DailyTaskWord'
+  Sentence: 'Sentence',
+  AiDict: 'AiDict',
+  UserSentenceHistory: 'UserSentenceHistory',
+  UserLoginHistory: 'UserLoginHistory',
+  System: 'System'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,9 +79,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
   nickname: 'nickname',
-  wordLevel: 'wordLevel',
-  dailyWordCount: 'dailyWordCount',
-  pronType: 'pronType',
+  sentenceLevel: 'sentenceLevel',
   wechatOpenid: 'wechatOpenid',
   googleOpenid: 'googleOpenid',
   createdAt: 'createdAt',
@@ -91,73 +90,69 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const WordScalarFieldEnum = {
+export const SentenceScalarFieldEnum = {
   id: 'id',
+  words: 'words',
+  translation: 'translation',
+  md5: 'md5',
+  level: 'level',
+  badScore: 'badScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type SentenceScalarFieldEnum = (typeof SentenceScalarFieldEnum)[keyof typeof SentenceScalarFieldEnum]
+
+
+export const AiDictScalarFieldEnum = {
   word: 'word',
   translation: 'translation',
   ukPhonetic: 'ukPhonetic',
   usPhonetic: 'usPhonetic',
-  ukPronunciation: 'ukPronunciation',
-  usPronunciation: 'usPronunciation',
-  level: 'level',
-  confusedWords: 'confusedWords',
-  confusedTranslations: 'confusedTranslations',
-  confusedUkPhonetics: 'confusedUkPhonetics',
-  confusedUsPhonetics: 'confusedUsPhonetics',
+  rank: 'rank',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
-export type WordScalarFieldEnum = (typeof WordScalarFieldEnum)[keyof typeof WordScalarFieldEnum]
+export type AiDictScalarFieldEnum = (typeof AiDictScalarFieldEnum)[keyof typeof AiDictScalarFieldEnum]
 
 
-export const UserCustomWordScalarFieldEnum = {
+export const UserSentenceHistoryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  word: 'word',
-  supported: 'supported',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type UserCustomWordScalarFieldEnum = (typeof UserCustomWordScalarFieldEnum)[keyof typeof UserCustomWordScalarFieldEnum]
-
-
-export const DailyTaskScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  taskCount: 'taskCount',
-  isFinished: 'isFinished',
-  finishedAt: 'finishedAt',
-  createdDate: 'createdDate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type DailyTaskScalarFieldEnum = (typeof DailyTaskScalarFieldEnum)[keyof typeof DailyTaskScalarFieldEnum]
-
-
-export const DailyTaskWordScalarFieldEnum = {
-  id: 'id',
-  dailyTaskId: 'dailyTaskId',
-  userId: 'userId',
-  wordId: 'wordId',
-  snapshotWord: 'snapshotWord',
-  questionMode: 'questionMode',
-  failedCount: 'failedCount',
+  sentenceId: 'sentenceId',
+  hintCount: 'hintCount',
   thinkingTime: 'thinkingTime',
   isFinished: 'isFinished',
-  finishedAt: 'finishedAt',
-  createdDate: 'createdDate',
+  speaker: 'speaker',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
-export type DailyTaskWordScalarFieldEnum = (typeof DailyTaskWordScalarFieldEnum)[keyof typeof DailyTaskWordScalarFieldEnum]
+export type UserSentenceHistoryScalarFieldEnum = (typeof UserSentenceHistoryScalarFieldEnum)[keyof typeof UserSentenceHistoryScalarFieldEnum]
+
+
+export const UserLoginHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  deviceInfo: 'deviceInfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type UserLoginHistoryScalarFieldEnum = (typeof UserLoginHistoryScalarFieldEnum)[keyof typeof UserLoginHistoryScalarFieldEnum]
+
+
+export const SystemScalarFieldEnum = {
+  key: 'key',
+  value: 'value'
+} as const
+
+export type SystemScalarFieldEnum = (typeof SystemScalarFieldEnum)[keyof typeof SystemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -166,14 +161,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -194,53 +181,43 @@ export const UserOrderByRelevanceFieldEnum = {
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
+export const SentenceOrderByRelevanceFieldEnum = {
+  words: 'words',
+  translation: 'translation',
+  md5: 'md5'
 } as const
 
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+export type SentenceOrderByRelevanceFieldEnum = (typeof SentenceOrderByRelevanceFieldEnum)[keyof typeof SentenceOrderByRelevanceFieldEnum]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const WordOrderByRelevanceFieldEnum = {
+export const AiDictOrderByRelevanceFieldEnum = {
   word: 'word',
   translation: 'translation',
   ukPhonetic: 'ukPhonetic',
-  usPhonetic: 'usPhonetic',
-  ukPronunciation: 'ukPronunciation',
-  usPronunciation: 'usPronunciation'
+  usPhonetic: 'usPhonetic'
 } as const
 
-export type WordOrderByRelevanceFieldEnum = (typeof WordOrderByRelevanceFieldEnum)[keyof typeof WordOrderByRelevanceFieldEnum]
+export type AiDictOrderByRelevanceFieldEnum = (typeof AiDictOrderByRelevanceFieldEnum)[keyof typeof AiDictOrderByRelevanceFieldEnum]
 
 
-export const UserCustomWordOrderByRelevanceFieldEnum = {
-  word: 'word'
+export const UserSentenceHistoryOrderByRelevanceFieldEnum = {
+  speaker: 'speaker'
 } as const
 
-export type UserCustomWordOrderByRelevanceFieldEnum = (typeof UserCustomWordOrderByRelevanceFieldEnum)[keyof typeof UserCustomWordOrderByRelevanceFieldEnum]
+export type UserSentenceHistoryOrderByRelevanceFieldEnum = (typeof UserSentenceHistoryOrderByRelevanceFieldEnum)[keyof typeof UserSentenceHistoryOrderByRelevanceFieldEnum]
 
 
-export const DailyTaskOrderByRelevanceFieldEnum = {
-  createdDate: 'createdDate'
+export const UserLoginHistoryOrderByRelevanceFieldEnum = {
+  deviceInfo: 'deviceInfo'
 } as const
 
-export type DailyTaskOrderByRelevanceFieldEnum = (typeof DailyTaskOrderByRelevanceFieldEnum)[keyof typeof DailyTaskOrderByRelevanceFieldEnum]
+export type UserLoginHistoryOrderByRelevanceFieldEnum = (typeof UserLoginHistoryOrderByRelevanceFieldEnum)[keyof typeof UserLoginHistoryOrderByRelevanceFieldEnum]
 
 
-export const DailyTaskWordOrderByRelevanceFieldEnum = {
-  snapshotWord: 'snapshotWord',
-  createdDate: 'createdDate'
+export const SystemOrderByRelevanceFieldEnum = {
+  key: 'key',
+  value: 'value'
 } as const
 
-export type DailyTaskWordOrderByRelevanceFieldEnum = (typeof DailyTaskWordOrderByRelevanceFieldEnum)[keyof typeof DailyTaskWordOrderByRelevanceFieldEnum]
+export type SystemOrderByRelevanceFieldEnum = (typeof SystemOrderByRelevanceFieldEnum)[keyof typeof SystemOrderByRelevanceFieldEnum]
 

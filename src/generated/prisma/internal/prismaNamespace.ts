@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.8.0
- * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
+ * Prisma Client JS version: 7.10.1
+ * Query Engine version: d1b3f377ca835d73fd50954a5e22128b9ebdd6b8
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.8.0",
-  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
+  client: "7.10.1",
+  engine: "d1b3f377ca835d73fd50954a5e22128b9ebdd6b8"
 }
 
 /**
@@ -156,6 +156,19 @@ export type Subset<T, U> = {
 };
 
 /**
+ * Resolved type of the argument passed to the `PrismaClient` constructor.
+ *
+ * When called without a narrower options type (the common case), this resolves
+ * to `PrismaClientOptions` directly, which produces a clear TypeScript error
+ * message (`not assignable to parameter of type 'PrismaClientOptions'`) when
+ * the argument is missing or incomplete. When the user supplies a narrower
+ * options type (e.g. via a literal), it falls back to `Subset` to keep
+ * filtering out unknown properties.
+ */
+export type PrismaClientConstructorArgs<Options extends PrismaClientOptions> =
+  [PrismaClientOptions] extends [Options] ? PrismaClientOptions : Subset<Options, PrismaClientOptions>;
+
+/**
  * SelectSubset
  * @desc From `T` pick properties that exist in `U`. Simple version of Intersection.
  * Additionally, it validates, if both select and include are present. If the case, it errors.
@@ -187,7 +200,7 @@ type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
 export type XOR<T, U> =
   T extends object ?
   U extends object ?
-    (Without<T, U> & U) | (Without<U, T> & T)
+    ((Without<T, U> & U) | (Without<U, T> & T)) & object
   : U : T
 
 
@@ -385,10 +398,11 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Word: 'Word',
-  UserCustomWord: 'UserCustomWord',
-  DailyTask: 'DailyTask',
-  DailyTaskWord: 'DailyTaskWord'
+  Sentence: 'Sentence',
+  AiDict: 'AiDict',
+  UserSentenceHistory: 'UserSentenceHistory',
+  UserLoginHistory: 'UserLoginHistory',
+  System: 'System'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "word" | "userCustomWord" | "dailyTask" | "dailyTaskWord"
+    modelProps: "user" | "sentence" | "aiDict" | "userSentenceHistory" | "userLoginHistory" | "system"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -474,267 +488,333 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Word: {
-      payload: Prisma.$WordPayload<ExtArgs>
-      fields: Prisma.WordFieldRefs
+    Sentence: {
+      payload: Prisma.$SentencePayload<ExtArgs>
+      fields: Prisma.SentenceFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.WordFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload> | null
+          args: Prisma.SentenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.WordFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         findFirst: {
-          args: Prisma.WordFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload> | null
+          args: Prisma.SentenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.WordFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         findMany: {
-          args: Prisma.WordFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>[]
+          args: Prisma.SentenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>[]
         }
         create: {
-          args: Prisma.WordCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         createMany: {
-          args: Prisma.WordCreateManyArgs<ExtArgs>
+          args: Prisma.SentenceCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         delete: {
-          args: Prisma.WordDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         update: {
-          args: Prisma.WordUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         deleteMany: {
-          args: Prisma.WordDeleteManyArgs<ExtArgs>
+          args: Prisma.SentenceDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.WordUpdateManyArgs<ExtArgs>
+          args: Prisma.SentenceUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         upsert: {
-          args: Prisma.WordUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$WordPayload>
+          args: Prisma.SentenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SentencePayload>
         }
         aggregate: {
-          args: Prisma.WordAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateWord>
+          args: Prisma.SentenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSentence>
         }
         groupBy: {
-          args: Prisma.WordGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.WordGroupByOutputType>[]
+          args: Prisma.SentenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SentenceGroupByOutputType>[]
         }
         count: {
-          args: Prisma.WordCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.WordCountAggregateOutputType> | number
+          args: Prisma.SentenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SentenceCountAggregateOutputType> | number
         }
       }
     }
-    UserCustomWord: {
-      payload: Prisma.$UserCustomWordPayload<ExtArgs>
-      fields: Prisma.UserCustomWordFieldRefs
+    AiDict: {
+      payload: Prisma.$AiDictPayload<ExtArgs>
+      fields: Prisma.AiDictFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.UserCustomWordFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload> | null
+          args: Prisma.AiDictFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.UserCustomWordFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         findFirst: {
-          args: Prisma.UserCustomWordFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload> | null
+          args: Prisma.AiDictFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.UserCustomWordFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         findMany: {
-          args: Prisma.UserCustomWordFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>[]
+          args: Prisma.AiDictFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>[]
         }
         create: {
-          args: Prisma.UserCustomWordCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         createMany: {
-          args: Prisma.UserCustomWordCreateManyArgs<ExtArgs>
+          args: Prisma.AiDictCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         delete: {
-          args: Prisma.UserCustomWordDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         update: {
-          args: Prisma.UserCustomWordUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         deleteMany: {
-          args: Prisma.UserCustomWordDeleteManyArgs<ExtArgs>
+          args: Prisma.AiDictDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.UserCustomWordUpdateManyArgs<ExtArgs>
+          args: Prisma.AiDictUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         upsert: {
-          args: Prisma.UserCustomWordUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCustomWordPayload>
+          args: Prisma.AiDictUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiDictPayload>
         }
         aggregate: {
-          args: Prisma.UserCustomWordAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserCustomWord>
+          args: Prisma.AiDictAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiDict>
         }
         groupBy: {
-          args: Prisma.UserCustomWordGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserCustomWordGroupByOutputType>[]
+          args: Prisma.AiDictGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiDictGroupByOutputType>[]
         }
         count: {
-          args: Prisma.UserCustomWordCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserCustomWordCountAggregateOutputType> | number
+          args: Prisma.AiDictCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiDictCountAggregateOutputType> | number
         }
       }
     }
-    DailyTask: {
-      payload: Prisma.$DailyTaskPayload<ExtArgs>
-      fields: Prisma.DailyTaskFieldRefs
+    UserSentenceHistory: {
+      payload: Prisma.$UserSentenceHistoryPayload<ExtArgs>
+      fields: Prisma.UserSentenceHistoryFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DailyTaskFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload> | null
+          args: Prisma.UserSentenceHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DailyTaskFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         findFirst: {
-          args: Prisma.DailyTaskFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload> | null
+          args: Prisma.UserSentenceHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DailyTaskFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         findMany: {
-          args: Prisma.DailyTaskFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>[]
+          args: Prisma.UserSentenceHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>[]
         }
         create: {
-          args: Prisma.DailyTaskCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         createMany: {
-          args: Prisma.DailyTaskCreateManyArgs<ExtArgs>
+          args: Prisma.UserSentenceHistoryCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         delete: {
-          args: Prisma.DailyTaskDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         update: {
-          args: Prisma.DailyTaskUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         deleteMany: {
-          args: Prisma.DailyTaskDeleteManyArgs<ExtArgs>
+          args: Prisma.UserSentenceHistoryDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DailyTaskUpdateManyArgs<ExtArgs>
+          args: Prisma.UserSentenceHistoryUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         upsert: {
-          args: Prisma.DailyTaskUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskPayload>
+          args: Prisma.UserSentenceHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserSentenceHistoryPayload>
         }
         aggregate: {
-          args: Prisma.DailyTaskAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDailyTask>
+          args: Prisma.UserSentenceHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserSentenceHistory>
         }
         groupBy: {
-          args: Prisma.DailyTaskGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyTaskGroupByOutputType>[]
+          args: Prisma.UserSentenceHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSentenceHistoryGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DailyTaskCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyTaskCountAggregateOutputType> | number
+          args: Prisma.UserSentenceHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserSentenceHistoryCountAggregateOutputType> | number
         }
       }
     }
-    DailyTaskWord: {
-      payload: Prisma.$DailyTaskWordPayload<ExtArgs>
-      fields: Prisma.DailyTaskWordFieldRefs
+    UserLoginHistory: {
+      payload: Prisma.$UserLoginHistoryPayload<ExtArgs>
+      fields: Prisma.UserLoginHistoryFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.DailyTaskWordFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload> | null
+          args: Prisma.UserLoginHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.DailyTaskWordFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         findFirst: {
-          args: Prisma.DailyTaskWordFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload> | null
+          args: Prisma.UserLoginHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.DailyTaskWordFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         findMany: {
-          args: Prisma.DailyTaskWordFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>[]
+          args: Prisma.UserLoginHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>[]
         }
         create: {
-          args: Prisma.DailyTaskWordCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         createMany: {
-          args: Prisma.DailyTaskWordCreateManyArgs<ExtArgs>
+          args: Prisma.UserLoginHistoryCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         delete: {
-          args: Prisma.DailyTaskWordDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         update: {
-          args: Prisma.DailyTaskWordUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         deleteMany: {
-          args: Prisma.DailyTaskWordDeleteManyArgs<ExtArgs>
+          args: Prisma.UserLoginHistoryDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.DailyTaskWordUpdateManyArgs<ExtArgs>
+          args: Prisma.UserLoginHistoryUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         upsert: {
-          args: Prisma.DailyTaskWordUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$DailyTaskWordPayload>
+          args: Prisma.UserLoginHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserLoginHistoryPayload>
         }
         aggregate: {
-          args: Prisma.DailyTaskWordAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateDailyTaskWord>
+          args: Prisma.UserLoginHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserLoginHistory>
         }
         groupBy: {
-          args: Prisma.DailyTaskWordGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyTaskWordGroupByOutputType>[]
+          args: Prisma.UserLoginHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserLoginHistoryGroupByOutputType>[]
         }
         count: {
-          args: Prisma.DailyTaskWordCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.DailyTaskWordCountAggregateOutputType> | number
+          args: Prisma.UserLoginHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserLoginHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    System: {
+      payload: Prisma.$SystemPayload<ExtArgs>
+      fields: Prisma.SystemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SystemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SystemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        findFirst: {
+          args: Prisma.SystemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SystemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        findMany: {
+          args: Prisma.SystemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>[]
+        }
+        create: {
+          args: Prisma.SystemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        createMany: {
+          args: Prisma.SystemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.SystemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        update: {
+          args: Prisma.SystemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        deleteMany: {
+          args: Prisma.SystemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SystemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.SystemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SystemPayload>
+        }
+        aggregate: {
+          args: Prisma.SystemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSystem>
+        }
+        groupBy: {
+          args: Prisma.SystemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SystemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SystemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SystemCountAggregateOutputType> | number
         }
       }
     }
@@ -781,9 +861,7 @@ export const UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
   nickname: 'nickname',
-  wordLevel: 'wordLevel',
-  dailyWordCount: 'dailyWordCount',
-  pronType: 'pronType',
+  sentenceLevel: 'sentenceLevel',
   wechatOpenid: 'wechatOpenid',
   googleOpenid: 'googleOpenid',
   createdAt: 'createdAt',
@@ -794,73 +872,69 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
-export const WordScalarFieldEnum = {
+export const SentenceScalarFieldEnum = {
   id: 'id',
+  words: 'words',
+  translation: 'translation',
+  md5: 'md5',
+  level: 'level',
+  badScore: 'badScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type SentenceScalarFieldEnum = (typeof SentenceScalarFieldEnum)[keyof typeof SentenceScalarFieldEnum]
+
+
+export const AiDictScalarFieldEnum = {
   word: 'word',
   translation: 'translation',
   ukPhonetic: 'ukPhonetic',
   usPhonetic: 'usPhonetic',
-  ukPronunciation: 'ukPronunciation',
-  usPronunciation: 'usPronunciation',
-  level: 'level',
-  confusedWords: 'confusedWords',
-  confusedTranslations: 'confusedTranslations',
-  confusedUkPhonetics: 'confusedUkPhonetics',
-  confusedUsPhonetics: 'confusedUsPhonetics',
+  rank: 'rank',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
-export type WordScalarFieldEnum = (typeof WordScalarFieldEnum)[keyof typeof WordScalarFieldEnum]
+export type AiDictScalarFieldEnum = (typeof AiDictScalarFieldEnum)[keyof typeof AiDictScalarFieldEnum]
 
 
-export const UserCustomWordScalarFieldEnum = {
+export const UserSentenceHistoryScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  word: 'word',
-  supported: 'supported',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type UserCustomWordScalarFieldEnum = (typeof UserCustomWordScalarFieldEnum)[keyof typeof UserCustomWordScalarFieldEnum]
-
-
-export const DailyTaskScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  taskCount: 'taskCount',
-  isFinished: 'isFinished',
-  finishedAt: 'finishedAt',
-  createdDate: 'createdDate',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type DailyTaskScalarFieldEnum = (typeof DailyTaskScalarFieldEnum)[keyof typeof DailyTaskScalarFieldEnum]
-
-
-export const DailyTaskWordScalarFieldEnum = {
-  id: 'id',
-  dailyTaskId: 'dailyTaskId',
-  userId: 'userId',
-  wordId: 'wordId',
-  snapshotWord: 'snapshotWord',
-  questionMode: 'questionMode',
-  failedCount: 'failedCount',
+  sentenceId: 'sentenceId',
+  hintCount: 'hintCount',
   thinkingTime: 'thinkingTime',
   isFinished: 'isFinished',
-  finishedAt: 'finishedAt',
-  createdDate: 'createdDate',
+  speaker: 'speaker',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
-export type DailyTaskWordScalarFieldEnum = (typeof DailyTaskWordScalarFieldEnum)[keyof typeof DailyTaskWordScalarFieldEnum]
+export type UserSentenceHistoryScalarFieldEnum = (typeof UserSentenceHistoryScalarFieldEnum)[keyof typeof UserSentenceHistoryScalarFieldEnum]
+
+
+export const UserLoginHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  deviceInfo: 'deviceInfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type UserLoginHistoryScalarFieldEnum = (typeof UserLoginHistoryScalarFieldEnum)[keyof typeof UserLoginHistoryScalarFieldEnum]
+
+
+export const SystemScalarFieldEnum = {
+  key: 'key',
+  value: 'value'
+} as const
+
+export type SystemScalarFieldEnum = (typeof SystemScalarFieldEnum)[keyof typeof SystemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -869,14 +943,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -897,55 +963,45 @@ export const UserOrderByRelevanceFieldEnum = {
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
+export const SentenceOrderByRelevanceFieldEnum = {
+  words: 'words',
+  translation: 'translation',
+  md5: 'md5'
 } as const
 
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+export type SentenceOrderByRelevanceFieldEnum = (typeof SentenceOrderByRelevanceFieldEnum)[keyof typeof SentenceOrderByRelevanceFieldEnum]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-export const WordOrderByRelevanceFieldEnum = {
+export const AiDictOrderByRelevanceFieldEnum = {
   word: 'word',
   translation: 'translation',
   ukPhonetic: 'ukPhonetic',
-  usPhonetic: 'usPhonetic',
-  ukPronunciation: 'ukPronunciation',
-  usPronunciation: 'usPronunciation'
+  usPhonetic: 'usPhonetic'
 } as const
 
-export type WordOrderByRelevanceFieldEnum = (typeof WordOrderByRelevanceFieldEnum)[keyof typeof WordOrderByRelevanceFieldEnum]
+export type AiDictOrderByRelevanceFieldEnum = (typeof AiDictOrderByRelevanceFieldEnum)[keyof typeof AiDictOrderByRelevanceFieldEnum]
 
 
-export const UserCustomWordOrderByRelevanceFieldEnum = {
-  word: 'word'
+export const UserSentenceHistoryOrderByRelevanceFieldEnum = {
+  speaker: 'speaker'
 } as const
 
-export type UserCustomWordOrderByRelevanceFieldEnum = (typeof UserCustomWordOrderByRelevanceFieldEnum)[keyof typeof UserCustomWordOrderByRelevanceFieldEnum]
+export type UserSentenceHistoryOrderByRelevanceFieldEnum = (typeof UserSentenceHistoryOrderByRelevanceFieldEnum)[keyof typeof UserSentenceHistoryOrderByRelevanceFieldEnum]
 
 
-export const DailyTaskOrderByRelevanceFieldEnum = {
-  createdDate: 'createdDate'
+export const UserLoginHistoryOrderByRelevanceFieldEnum = {
+  deviceInfo: 'deviceInfo'
 } as const
 
-export type DailyTaskOrderByRelevanceFieldEnum = (typeof DailyTaskOrderByRelevanceFieldEnum)[keyof typeof DailyTaskOrderByRelevanceFieldEnum]
+export type UserLoginHistoryOrderByRelevanceFieldEnum = (typeof UserLoginHistoryOrderByRelevanceFieldEnum)[keyof typeof UserLoginHistoryOrderByRelevanceFieldEnum]
 
 
-export const DailyTaskWordOrderByRelevanceFieldEnum = {
-  snapshotWord: 'snapshotWord',
-  createdDate: 'createdDate'
+export const SystemOrderByRelevanceFieldEnum = {
+  key: 'key',
+  value: 'value'
 } as const
 
-export type DailyTaskWordOrderByRelevanceFieldEnum = (typeof DailyTaskWordOrderByRelevanceFieldEnum)[keyof typeof DailyTaskWordOrderByRelevanceFieldEnum]
+export type SystemOrderByRelevanceFieldEnum = (typeof SystemOrderByRelevanceFieldEnum)[keyof typeof SystemOrderByRelevanceFieldEnum]
 
 
 
@@ -976,13 +1032,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
- * Reference to a field of type 'PronunciationType'
- */
-export type EnumPronunciationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PronunciationType'>
-    
-
-
-/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -990,30 +1039,9 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
 
 
 /**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'QuestionMode'
- */
-export type EnumQuestionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionMode'>
     
 
 
@@ -1033,19 +1061,10 @@ export type BatchPayload = {
 export const defineExtension = runtime.Extensions.defineExtension as unknown as runtime.Types.Extensions.ExtendsHook<"define", TypeMapCb, runtime.Types.Extensions.DefaultArgs>
 export type DefaultPrismaClient = PrismaClient
 export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
-export type PrismaClientOptions = ({
-  /**
-   * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-pg`.
-   */
-  adapter: runtime.SqlDriverAdapterFactory
-  accelerateUrl?: never
-} | {
-  /**
-   * Prisma Accelerate URL allowing the client to connect through Accelerate instead of a direct database.
-   */
-  accelerateUrl: string
-  adapter?: never
-}) & {
+/**
+ * Options common to all variants of `PrismaClientOptions`, regardless of whether you connect to your database through a driver adapter or through Prisma Accelerate.
+ */
+export interface PrismaClientBaseOptions {
   /**
    * @default "colorless"
    */
@@ -1132,12 +1151,63 @@ export type PrismaClientOptions = ({
    */
   queryPlanCacheMaxSize?: number
 }
+
+/**
+ * `PrismaClient` options for connecting to your database through Prisma Accelerate instead of a driver adapter.
+ * 
+ * Learn more: https://pris.ly/d/accelerate
+ */
+export interface PrismaClientOptionsWithAccelerateUrl extends PrismaClientBaseOptions {
+  /**
+   * The Prisma Accelerate connection URL. Use this option to connect to your database through Prisma Accelerate instead of using a driver adapter to connect directly.
+   * 
+   * Learn more: https://pris.ly/d/accelerate
+   */
+  accelerateUrl: string
+  adapter?: never
+}
+
+/**
+ * `PrismaClient` options for connecting to your database through a driver adapter. This is the common case in Prisma 7.
+ * 
+ * Learn more: https://pris.ly/d/driver-adapters
+ */
+export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions {
+  /**
+   * A driver adapter that PrismaClient uses to connect to your database, such as the ones provided by `@prisma/adapter-pg`, `@prisma/adapter-libsql`, `@prisma/adapter-planetscale`, etc.
+   * 
+   * A driver adapter is **required** unless you connect to your database through Prisma Accelerate (in which case use `accelerateUrl` instead).
+   * 
+   * Learn more: https://pris.ly/d/driver-adapters
+   * 
+   * @example
+   * ```ts
+   * import { PrismaPg } from '@prisma/adapter-pg'
+   * import { PrismaClient } from './generated/prisma/client'
+   * 
+   * const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+   * const prisma = new PrismaClient({ adapter })
+   * ```
+   */
+  adapter: runtime.SqlDriverAdapterFactory
+  accelerateUrl?: never
+}
+
+/**
+ * Options passed to the `PrismaClient` constructor.
+ * 
+ * A driver adapter (or, alternatively, a Prisma Accelerate URL) is **required**. See {@link PrismaClientOptionsWithAdapter} and {@link PrismaClientOptionsWithAccelerateUrl} for the two variants. All other properties live in {@link PrismaClientBaseOptions} and are optional.
+ * 
+ * Learn more about driver adapters: https://pris.ly/d/driver-adapters
+ */
+export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
-  word?: Prisma.WordOmit
-  userCustomWord?: Prisma.UserCustomWordOmit
-  dailyTask?: Prisma.DailyTaskOmit
-  dailyTaskWord?: Prisma.DailyTaskWordOmit
+  sentence?: Prisma.SentenceOmit
+  aiDict?: Prisma.AiDictOmit
+  userSentenceHistory?: Prisma.UserSentenceHistoryOmit
+  userLoginHistory?: Prisma.UserLoginHistoryOmit
+  system?: Prisma.SystemOmit
 }
 
 /* Types for Logging */

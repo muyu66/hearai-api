@@ -1,11 +1,11 @@
 import { IsNumber, IsString } from 'class-validator';
 
-export class ReportDailyTaskWordDto {
+export class ReportSentenceHistoryDto {
   @IsString()
-  taskWordId: string;
+  taskId!: string;
   @IsNumber()
-  failedCount: number;
+  hintCount!: number;
   /// 思考时间 单位ms
   @IsNumber()
-  thinkingTime: number;
+  thinkingTime!: number;
 }

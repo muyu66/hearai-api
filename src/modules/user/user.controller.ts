@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
-import { CurrUser } from '../../common/decorators/current-user.decorator';
-import type { AuthUser } from '../../common/interfaces/auth-user.interface';
+import { CurrUser } from '@/common/decorators/current-user.decorator';
+import type { AuthUser } from '@/common/interfaces/auth-user.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { UserService } from './user.service';
@@ -14,9 +14,7 @@ export class UserController {
     const user = await this.userService.findById(BigInt(authUser.userId));
     return {
       nickname: user.nickname,
-      wordLevel: user.wordLevel,
-      dailyWordCount: user.dailyWordCount,
-      pronType: user.pronType,
+      sentenceLevel: user.sentenceLevel,
       createdAt: user.createdAt,
     };
   }
@@ -29,9 +27,7 @@ export class UserController {
     const user = await this.userService.update(BigInt(authUser.userId), dto);
     return {
       nickname: user.nickname,
-      wordLevel: user.wordLevel,
-      dailyWordCount: user.dailyWordCount,
-      pronType: user.pronType,
+      sentenceLevel: user.sentenceLevel,
       createdAt: user.createdAt,
     };
   }

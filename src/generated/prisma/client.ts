@@ -45,22 +45,27 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
- * Model Word
- * 单词表
+ * Model Sentence
+ * 语句表
  */
-export type Word = Prisma.WordModel
+export type Sentence = Prisma.SentenceModel
 /**
- * Model UserCustomWord
- * 用户自定义的单词
+ * Model AiDict
+ * AI字典
  */
-export type UserCustomWord = Prisma.UserCustomWordModel
+export type AiDict = Prisma.AiDictModel
 /**
- * Model DailyTask
- * 每日推送任务
+ * Model UserSentenceHistory
+ * 用户学习语句历史表
  */
-export type DailyTask = Prisma.DailyTaskModel
+export type UserSentenceHistory = Prisma.UserSentenceHistoryModel
 /**
- * Model DailyTaskWord
- * 每日推送任务单词
+ * Model UserLoginHistory
+ * 用户登录历史表
  */
-export type DailyTaskWord = Prisma.DailyTaskWordModel
+export type UserLoginHistory = Prisma.UserLoginHistoryModel
+/**
+ * Model System
+ * 系统配置表
+ */
+export type System = Prisma.SystemModel

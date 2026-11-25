@@ -9,19 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const PronunciationType = {
-  UK: 'UK',
-  US: 'US'
-} as const
-
-export type PronunciationType = (typeof PronunciationType)[keyof typeof PronunciationType]
 
 
-export const QuestionMode = {
-  WORD_TO_TRAN: 'WORD_TO_TRAN',
-  WORD_TO_SOUND: 'WORD_TO_SOUND',
-  SOUND_TO_TRAN: 'SOUND_TO_TRAN',
-  TRAN_TO_WORD: 'TRAN_TO_WORD'
-} as const
-
-export type QuestionMode = (typeof QuestionMode)[keyof typeof QuestionMode]
+// This file is empty because there are no enums in the schema.
+export {}

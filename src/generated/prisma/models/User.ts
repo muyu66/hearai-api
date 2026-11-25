@@ -28,23 +28,19 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
-  wordLevel: number | null
-  dailyWordCount: number | null
+  sentenceLevel: number | null
 }
 
 export type UserSumAggregateOutputType = {
   id: bigint | null
-  wordLevel: number | null
-  dailyWordCount: number | null
+  sentenceLevel: number | null
 }
 
 export type UserMinAggregateOutputType = {
   id: bigint | null
   username: string | null
   nickname: string | null
-  wordLevel: number | null
-  dailyWordCount: number | null
-  pronType: $Enums.PronunciationType | null
+  sentenceLevel: number | null
   wechatOpenid: string | null
   googleOpenid: string | null
   createdAt: Date | null
@@ -56,9 +52,7 @@ export type UserMaxAggregateOutputType = {
   id: bigint | null
   username: string | null
   nickname: string | null
-  wordLevel: number | null
-  dailyWordCount: number | null
-  pronType: $Enums.PronunciationType | null
+  sentenceLevel: number | null
   wechatOpenid: string | null
   googleOpenid: string | null
   createdAt: Date | null
@@ -70,9 +64,7 @@ export type UserCountAggregateOutputType = {
   id: number
   username: number
   nickname: number
-  wordLevel: number
-  dailyWordCount: number
-  pronType: number
+  sentenceLevel: number
   wechatOpenid: number
   googleOpenid: number
   createdAt: number
@@ -84,23 +76,19 @@ export type UserCountAggregateOutputType = {
 
 export type UserAvgAggregateInputType = {
   id?: true
-  wordLevel?: true
-  dailyWordCount?: true
+  sentenceLevel?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
-  wordLevel?: true
-  dailyWordCount?: true
+  sentenceLevel?: true
 }
 
 export type UserMinAggregateInputType = {
   id?: true
   username?: true
   nickname?: true
-  wordLevel?: true
-  dailyWordCount?: true
-  pronType?: true
+  sentenceLevel?: true
   wechatOpenid?: true
   googleOpenid?: true
   createdAt?: true
@@ -112,9 +100,7 @@ export type UserMaxAggregateInputType = {
   id?: true
   username?: true
   nickname?: true
-  wordLevel?: true
-  dailyWordCount?: true
-  pronType?: true
+  sentenceLevel?: true
   wechatOpenid?: true
   googleOpenid?: true
   createdAt?: true
@@ -126,9 +112,7 @@ export type UserCountAggregateInputType = {
   id?: true
   username?: true
   nickname?: true
-  wordLevel?: true
-  dailyWordCount?: true
-  pronType?: true
+  sentenceLevel?: true
   wechatOpenid?: true
   googleOpenid?: true
   createdAt?: true
@@ -227,9 +211,7 @@ export type UserGroupByOutputType = {
   id: bigint
   username: string
   nickname: string
-  wordLevel: number
-  dailyWordCount: number
-  pronType: $Enums.PronunciationType
+  sentenceLevel: number
   wechatOpenid: string | null
   googleOpenid: string | null
   createdAt: Date
@@ -264,9 +246,7 @@ export type UserWhereInput = {
   id?: Prisma.BigIntFilter<"User"> | bigint | number
   username?: Prisma.StringFilter<"User"> | string
   nickname?: Prisma.StringFilter<"User"> | string
-  wordLevel?: Prisma.IntFilter<"User"> | number
-  dailyWordCount?: Prisma.IntFilter<"User"> | number
-  pronType?: Prisma.EnumPronunciationTypeFilter<"User"> | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFilter<"User"> | number
   wechatOpenid?: Prisma.StringNullableFilter<"User"> | string | null
   googleOpenid?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -278,9 +258,7 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
-  pronType?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
   wechatOpenid?: Prisma.SortOrderInput | Prisma.SortOrder
   googleOpenid?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -298,9 +276,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   nickname?: Prisma.StringFilter<"User"> | string
-  wordLevel?: Prisma.IntFilter<"User"> | number
-  dailyWordCount?: Prisma.IntFilter<"User"> | number
-  pronType?: Prisma.EnumPronunciationTypeFilter<"User"> | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -310,9 +286,7 @@ export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
-  pronType?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
   wechatOpenid?: Prisma.SortOrderInput | Prisma.SortOrder
   googleOpenid?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -332,9 +306,7 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   nickname?: Prisma.StringWithAggregatesFilter<"User"> | string
-  wordLevel?: Prisma.IntWithAggregatesFilter<"User"> | number
-  dailyWordCount?: Prisma.IntWithAggregatesFilter<"User"> | number
-  pronType?: Prisma.EnumPronunciationTypeWithAggregatesFilter<"User"> | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntWithAggregatesFilter<"User"> | number
   wechatOpenid?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   googleOpenid?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -346,9 +318,7 @@ export type UserCreateInput = {
   id?: bigint | number
   username: string
   nickname?: string
-  wordLevel?: number
-  dailyWordCount?: number
-  pronType: $Enums.PronunciationType
+  sentenceLevel?: number
   wechatOpenid?: string | null
   googleOpenid?: string | null
   createdAt?: Date | string
@@ -360,9 +330,7 @@ export type UserUncheckedCreateInput = {
   id?: bigint | number
   username: string
   nickname?: string
-  wordLevel?: number
-  dailyWordCount?: number
-  pronType: $Enums.PronunciationType
+  sentenceLevel?: number
   wechatOpenid?: string | null
   googleOpenid?: string | null
   createdAt?: Date | string
@@ -374,9 +342,7 @@ export type UserUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   username?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
-  wordLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  dailyWordCount?: Prisma.IntFieldUpdateOperationsInput | number
-  pronType?: Prisma.EnumPronunciationTypeFieldUpdateOperationsInput | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFieldUpdateOperationsInput | number
   wechatOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,9 +354,7 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   username?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
-  wordLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  dailyWordCount?: Prisma.IntFieldUpdateOperationsInput | number
-  pronType?: Prisma.EnumPronunciationTypeFieldUpdateOperationsInput | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFieldUpdateOperationsInput | number
   wechatOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,9 +366,7 @@ export type UserCreateManyInput = {
   id?: bigint | number
   username: string
   nickname?: string
-  wordLevel?: number
-  dailyWordCount?: number
-  pronType: $Enums.PronunciationType
+  sentenceLevel?: number
   wechatOpenid?: string | null
   googleOpenid?: string | null
   createdAt?: Date | string
@@ -416,9 +378,7 @@ export type UserUpdateManyMutationInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   username?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
-  wordLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  dailyWordCount?: Prisma.IntFieldUpdateOperationsInput | number
-  pronType?: Prisma.EnumPronunciationTypeFieldUpdateOperationsInput | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFieldUpdateOperationsInput | number
   wechatOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,9 +390,7 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   username?: Prisma.StringFieldUpdateOperationsInput | string
   nickname?: Prisma.StringFieldUpdateOperationsInput | string
-  wordLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  dailyWordCount?: Prisma.IntFieldUpdateOperationsInput | number
-  pronType?: Prisma.EnumPronunciationTypeFieldUpdateOperationsInput | $Enums.PronunciationType
+  sentenceLevel?: Prisma.IntFieldUpdateOperationsInput | number
   wechatOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googleOpenid?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -450,9 +408,7 @@ export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
-  pronType?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
   wechatOpenid?: Prisma.SortOrder
   googleOpenid?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -462,17 +418,14 @@ export type UserCountOrderByAggregateInput = {
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
-  pronType?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
   wechatOpenid?: Prisma.SortOrder
   googleOpenid?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,9 +437,7 @@ export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   nickname?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
-  pronType?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
   wechatOpenid?: Prisma.SortOrder
   googleOpenid?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -496,8 +447,7 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  wordLevel?: Prisma.SortOrder
-  dailyWordCount?: Prisma.SortOrder
+  sentenceLevel?: Prisma.SortOrder
 }
 
 export type BigIntFieldUpdateOperationsInput = {
@@ -520,10 +470,6 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type EnumPronunciationTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PronunciationType
-}
-
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -542,9 +488,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   username?: boolean
   nickname?: boolean
-  wordLevel?: boolean
-  dailyWordCount?: boolean
-  pronType?: boolean
+  sentenceLevel?: boolean
   wechatOpenid?: boolean
   googleOpenid?: boolean
   createdAt?: boolean
@@ -558,9 +502,7 @@ export type UserSelectScalar = {
   id?: boolean
   username?: boolean
   nickname?: boolean
-  wordLevel?: boolean
-  dailyWordCount?: boolean
-  pronType?: boolean
+  sentenceLevel?: boolean
   wechatOpenid?: boolean
   googleOpenid?: boolean
   createdAt?: boolean
@@ -568,7 +510,7 @@ export type UserSelectScalar = {
   deletedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "nickname" | "wordLevel" | "dailyWordCount" | "pronType" | "wechatOpenid" | "googleOpenid" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "nickname" | "sentenceLevel" | "wechatOpenid" | "googleOpenid" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["user"]>
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
@@ -578,17 +520,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     username: string
     nickname: string
     /**
-     * 单词难度等级
+     * 语句难度等级
      */
-    wordLevel: number
-    /**
-     * 每日单词任务数量
-     */
-    dailyWordCount: number
-    /**
-     * 发音类型
-     */
-    pronType: $Enums.PronunciationType
+    sentenceLevel: number
     wechatOpenid: string | null
     googleOpenid: string | null
     createdAt: Date
@@ -966,9 +900,7 @@ export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'BigInt'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly nickname: Prisma.FieldRef<"User", 'String'>
-  readonly wordLevel: Prisma.FieldRef<"User", 'Int'>
-  readonly dailyWordCount: Prisma.FieldRef<"User", 'Int'>
-  readonly pronType: Prisma.FieldRef<"User", 'PronunciationType'>
+  readonly sentenceLevel: Prisma.FieldRef<"User", 'Int'>
   readonly wechatOpenid: Prisma.FieldRef<"User", 'String'>
   readonly googleOpenid: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>

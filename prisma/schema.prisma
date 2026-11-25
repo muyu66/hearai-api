@@ -8,32 +8,13 @@ datasource db {
   provider = "mysql"
 }
 
-enum PronunciationType {
-  // 英式发音
-  UK
-  // 美式发音
-  US
-}
-
-/// 英文->音标->中文->英文
-enum QuestionMode {
-  WORD_TO_TRAN // 学习模式
-  WORD_TO_SOUND // 复习模式
-  SOUND_TO_TRAN // 复习模式
-  TRAN_TO_WORD // 复习模式
-}
-
 /// 用户表
 model User {
-  id             BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
-  username       String            @unique @db.VarChar(50)
-  nickname       String            @default("") @db.VarChar(100)
-  /// 单词难度等级
-  wordLevel      Int               @default(0) @map("word_level") @db.UnsignedTinyInt
-  /// 每日单词任务数量
-  dailyWordCount Int               @default(0) @map("daily_word_count") @db.UnsignedSmallInt
-  /// 发音类型
-  pronType       PronunciationType @map("pron_type")
+  id            BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  username      String @unique @db.VarChar(50)
+  nickname      String @default("") @db.VarChar(100)
+  /// 语句难度等级
+  sentenceLevel Int    @default(0) @map("sentence_level") @db.UnsignedTinyInt
 
   wechatOpenid String? @unique @map("wechat_openid") @db.VarChar(255)
   googleOpenid String? @unique @map("google_openid") @db.VarChar(255)
@@ -45,112 +26,84 @@ model User {
   @@map("users")
 }
 
-/// 单词表
-model Word {
-  id              BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  word            String  @db.VarChar(200)
-  translation     String  @db.VarChar(1000)
-  /// 英式音标
-  ukPhonetic      String  @map("uk_phonetic") @db.VarChar(255)
-  /// 美式音标
-  usPhonetic      String  @map("us_phonetic") @db.VarChar(255)
-  /// 英式音标发音地址
-  ukPronunciation String? @map("uk_pronunciation") @db.VarChar(255)
-  /// 美式音标发音地址
-  usPronunciation String? @map("us_pronunciation") @db.VarChar(255)
-  level           Int     @default(1) @map("level") @db.UnsignedTinyInt
-
-  /// 易混淆的单词
-  confusedWords        Json? @map("confused_words")
-  /// 易混淆的中文释义
-  confusedTranslations Json? @map("confused_translations")
-  /// 易混淆的英式单词音标发音
-  confusedUkPhonetics  Json? @map("confused_uk_phonetics")
-  /// 易混淆的美式式单词音标发音
-  confusedUsPhonetics  Json? @map("confused_us_phonetics")
+/// 语句表
+model Sentence {
+  id          BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  words       String @db.VarChar(200)
+  translation String @db.VarChar(400)
+  md5         String @db.VarChar(32)
+  level       Int    @default(0) @map("level") @db.UnsignedTinyInt
+  /// 差评数量
+  badScore    Int    @default(0) @map("bad_score") @db.UnsignedInt
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  dailyTaskWords DailyTaskWord[]
+  userSentenceHistories UserSentenceHistory[]
 
-  /// 同一单词只能有一条记录
+  /// 同一语句只能有一条记录
+  @@unique(md5)
+  @@map("sentences")
+}
+
+/// AI字典
+model AiDict {
+  word        String @db.VarChar(200)
+  translation String @db.VarChar(1000)
+  ukPhonetic  String @map("uk_phonetic") @db.VarChar(255)
+  usPhonetic  String @map("us_phonetic") @db.VarChar(255)
+  rank        Int    @default(0) @db.UnsignedTinyInt
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
+
   @@unique(word)
-  @@map("words")
+  @@map("ai_dict")
 }
 
-/// 用户自定义的单词
-model UserCustomWord {
-  id        BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
-  userId    BigInt  @map("user_id") @db.UnsignedBigInt
-  word      String  @db.VarChar(200)
-  /// 用户上报的单词是否已支持在字典里
-  supported Boolean @default(false)
+/// 用户学习语句历史表
+model UserSentenceHistory {
+  id         BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  userId     BigInt @map("user_id") @db.UnsignedBigInt
+  sentenceId BigInt @map("sentence_id") @db.UnsignedBigInt
+
+  hintCount    Int     @map("hint_count") @db.UnsignedTinyInt
+  thinkingTime Int     @map("thinking_time") @db.UnsignedInt
+  isFinished   Boolean @map("is_finished") @db.UnsignedTinyInt
+  speaker      String  @db.VarChar(20)
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  /// 同一用户同一单词只能有一条记录
-  @@unique([userId, word])
-  @@map("user_custom_words")
+  sentence Sentence @relation(fields: [sentenceId], references: [id])
+
+  @@unique([id])
+  @@map("user_sentence_history")
 }
 
-/// 每日推送任务
-model DailyTask {
-  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  userId     BigInt    @map("user_id") @db.UnsignedBigInt
-  /// 任务数量
-  taskCount  Int       @default(0) @map("task_count") @db.UnsignedSmallInt
-  /// 本任务是否完成过
-  isFinished Boolean   @default(false) @map("is_finished")
-  finishedAt DateTime? @map("finished_at") @db.DateTime(0)
-
-  createdDate String @map("created_date") @db.VarChar(10)
+/// 用户登录历史表
+model UserLoginHistory {
+  id         BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  userId     BigInt @map("user_id") @db.UnsignedBigInt
+  deviceInfo String @map("device_info") @db.VarChar(1000)
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  dailyTaskWords DailyTaskWord[]
-
-  /// 同一用户同一天只能有一条记录
-  @@unique([userId, createdDate])
-  @@map("daily_tasks")
+  @@unique([id])
+  @@map("user_login_history")
 }
 
-/// 每日推送任务单词
-model DailyTaskWord {
-  id           BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
-  dailyTaskId  BigInt       @map("daily_task_id") @db.UnsignedBigInt
-  userId       BigInt       @map("user_id") @db.UnsignedBigInt
-  wordId       BigInt       @map("word_id") @db.UnsignedBigInt
-  /// 冗余
-  snapshotWord String       @map("snapshot_word") @db.VarChar(200)
-  /// 题型
-  questionMode QuestionMode @map("question_mode")
-  /// 选错的次数
-  failedCount  Int          @default(0) @map("failed_count") @db.UnsignedTinyInt
-  /// 思考时间 单位ms
-  thinkingTime Int          @default(0) @map("thinking_time") @db.UnsignedInt
+/// 系统配置表
+model System {
+  key   String @db.VarChar(255)
+  value String @db.VarChar(255)
 
-  /// 本单词任务是否完成过
-  isFinished Boolean   @default(false) @map("is_finished")
-  finishedAt DateTime? @map("finished_at") @db.DateTime(0)
-
-  createdDate String @map("created_date") @db.VarChar(10)
-
-  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
-
-  word      Word      @relation(fields: [wordId], references: [id], onDelete: Cascade)
-  dailyTask DailyTask @relation(fields: [dailyTaskId], references: [id], onDelete: Cascade)
-
-  /// 同一任务同一单词同一题型只能有一条记录
-  @@unique([dailyTaskId, wordId, questionMode])
-  /// 同一用户同一天同一单词同一题型只能有一条记录 (同一用户同一天 = 同一任务)
-  @@unique([userId, wordId, createdDate, questionMode])
-  @@map("daily_task_words")
+  /// 同一语句只能有一条记录
+  @@unique(key)
+  @@map("system")
 }

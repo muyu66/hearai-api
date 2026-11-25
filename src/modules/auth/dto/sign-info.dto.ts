@@ -1,4 +1,4 @@
-export class SignInfo {
+export interface SignInfo {
   accessToken: string;
   newUser: boolean;
 }

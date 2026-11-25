@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PronunciationType, User } from 'src/generated/prisma/client';
+import { User } from '@/generated/prisma/client';
 import { generateCuteNickname } from 'cute-nickname';
-import { makeId } from 'src/common/tools/tool';
+import { makeId } from '@/common/tools/tool';
 
 @Injectable()
 export class UserService {
@@ -57,10 +57,8 @@ export class UserService {
       data: {
         username: wechatOpenid !== null ? 'wechat_' + id : 'google_' + id,
         nickname: generateCuteNickname({ forcePrefix: true }),
-        wordLevel: 1,
-        dailyWordCount: 10,
-        pronType: PronunciationType.US,
-
+        // 新用户默认难度
+        sentenceLevel: 0,
         wechatOpenid,
         googleOpenid,
       },
@@ -73,11 +71,9 @@ export class UserService {
     return this.prisma.user.update({
       where: { id },
       data: {
-        ...(dto.wordLevel != null ? { wordLevel: dto.wordLevel } : {}),
-        ...(dto.dailyWordCount != null
-          ? { dailyWordCount: dto.dailyWordCount }
+        ...(dto.sentenceLevel != null
+          ? { sentenceLevel: dto.sentenceLevel }
           : {}),
-        ...(dto.pronType != null ? { pronType: dto.pronType } : {}),
       },
     });
   }

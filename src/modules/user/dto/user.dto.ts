@@ -1,9 +1,5 @@
-import { PronunciationType } from 'src/generated/prisma/enums';
-
-export class UserDto {
+export interface UserDto {
   nickname: string;
-  wordLevel: number;
-  dailyWordCount: number;
-  pronType: PronunciationType;
+  sentenceLevel: number;
   createdAt: Date;
 }

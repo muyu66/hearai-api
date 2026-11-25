@@ -1,4 +1,4 @@
-export class AuthUser {
+export interface AuthUser {
   userId: string;
   nickname: string;
   isWechatUser: boolean;

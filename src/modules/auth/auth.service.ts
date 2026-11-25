@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { User } from 'src/generated/prisma/client';
-import { AuthUser } from 'src/common/interfaces/auth-user.interface';
+import { User } from '@/generated/prisma/client';
+import { AuthUser } from '@/common/interfaces/auth-user.interface';
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';

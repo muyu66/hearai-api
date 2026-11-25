@@ -9,8 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
-export type * from './models/Word.js'
-export type * from './models/UserCustomWord.js'
-export type * from './models/DailyTask.js'
-export type * from './models/DailyTaskWord.js'
+export type * from './models/Sentence.js'
+export type * from './models/AiDict.js'
+export type * from './models/UserSentenceHistory.js'
+export type * from './models/UserLoginHistory.js'
+export type * from './models/System.js'
 export type * from './commonInputTypes.js'
