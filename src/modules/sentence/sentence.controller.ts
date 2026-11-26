@@ -16,6 +16,13 @@ export class SentenceController {
     return this.sentenceService.getSentences(BigInt(authUser.userId));
   }
 
+  @Get('next')
+  async getNextSentences(
+    @CurrUser() authUser: AuthUser,
+  ): Promise<UserSentenceHistoryDto[]> {
+    return this.sentenceService.getNextSentences(BigInt(authUser.userId));
+  }
+
   @Post('report')
   async report(
     @Body() body: ReportSentenceHistoryDto,

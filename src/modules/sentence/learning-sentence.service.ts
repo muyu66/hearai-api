@@ -24,7 +24,7 @@ export class LearningSentenceService {
     const count = await this.prisma.sentence.count({
       where: {
         level: sentenceLevel,
-        userSentenceHistory: {
+        userSentenceHistories: {
           none: { userId },
         },
       },
@@ -80,7 +80,7 @@ export class LearningSentenceService {
     const defaultCandidates = await this.prisma.sentence.findMany({
       where: {
         level: sentenceLevel,
-        userSentenceHistory: {
+        userSentenceHistories: {
           none: { userId }, // 不存在任何关联记录
         },
       },

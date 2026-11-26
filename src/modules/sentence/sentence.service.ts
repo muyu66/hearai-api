@@ -6,6 +6,7 @@ import { LearningSentenceService } from './learning-sentence.service';
 import { ReviewSentenceService } from './review-sentence.service';
 import { UserSentenceHistoryDto } from './dto/sentence.dto';
 import { WordTokenizer } from 'natural';
+import { Sentence, UserSentenceHistory } from '@/generated/prisma/client';
 
 @Injectable()
 export class SentenceService {
@@ -20,7 +21,7 @@ export class SentenceService {
   ) {}
 
   /**
-   * 获取今天的单词
+   * 获取初始语句
    * @param userId
    * @returns
    */
@@ -32,7 +33,7 @@ export class SentenceService {
     });
 
     // 按需 推动下一批次语句生成
-    await this.planNext(userId, user.sentenceLevel);
+    await this.getPlannedNext(userId, user.sentenceLevel);
 
     const userSentenceHistories =
       await this.prisma.userSentenceHistory.findMany({
@@ -45,6 +46,47 @@ export class SentenceService {
         },
       });
 
+    return this.formatDto(userSentenceHistories);
+  }
+
+  /**
+   * 获取追加语句
+   * @param userId
+   * @returns
+   */
+  async getNextSentences(userId: bigint): Promise<UserSentenceHistoryDto[]> {
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
+
+    // 按需 推动下一批次语句生成
+    const historyIds = await this.getPlannedNext(userId, user.sentenceLevel);
+    if (historyIds.length === 0) {
+      return [];
+    }
+
+    const userSentenceHistories =
+      await this.prisma.userSentenceHistory.findMany({
+        where: {
+          id: {
+            in: historyIds,
+          },
+          userId,
+          isFinished: false,
+        },
+        include: {
+          sentence: true,
+        },
+      });
+
+    return this.formatDto(userSentenceHistories);
+  }
+
+  private async formatDto(
+    userSentenceHistories: (UserSentenceHistory & { sentence: Sentence })[],
+  ): Promise<UserSentenceHistoryDto[]> {
     const pronUrls: { sentenceId: bigint; pronUrl: string | null }[] = [];
     await Promise.all(
       userSentenceHistories.map(async (userSentenceHistory) => {
@@ -68,7 +110,6 @@ export class SentenceService {
       )?.pronUrl;
       return {
         taskId: userSentenceHistory.id.toString(),
-        words: userSentenceHistory.sentence.words,
         tokenizeWords,
         translation: userSentenceHistory.sentence.translation,
         pronUrl: pronUrl || null,
@@ -93,12 +134,6 @@ export class SentenceService {
    * @returns
    */
   async report(dto: ReportSentenceHistoryDto, userId: bigint): Promise<void> {
-    const user = await this.prisma.user.findUniqueOrThrow({
-      where: {
-        id: userId,
-      },
-    });
-
     // 更新用户语句历史
     await this.prisma.userSentenceHistory.update({
       where: {
@@ -112,35 +147,35 @@ export class SentenceService {
         thinkingTime: dto.thinkingTime,
       },
     });
-
-    // 按需 推动下一批次语句生成
-    await this.planNext(userId, user.sentenceLevel);
   }
 
   /**
-   * 创建语句
+   * 创建语句任务
    * @param userId
    * @param sentences
-   * @returns
+   * @returns 语句任务的ids
    */
   private async createUserSentenceHistories(
     userId: bigint,
     sentences: { sentenceId: bigint; speaker: string }[],
-  ): Promise<void> {
-    return this.prisma.$transaction(async (tx) => {
-      await tx.userSentenceHistory.createMany({
-        data: sentences.map((sentence) => {
-          return {
+  ): Promise<bigint[]> {
+    const ids: bigint[] = [];
+    await this.prisma.$transaction(async (tx) => {
+      for (let i = 1; i < sentences.length; i++) {
+        const model = await tx.userSentenceHistory.create({
+          data: {
             userId,
-            sentenceId: sentence.sentenceId,
-            speaker: sentence.speaker,
+            sentenceId: sentences[i].sentenceId,
+            speaker: sentences[i].speaker,
             isFinished: false,
             hintCount: 0,
             thinkingTime: 0,
-          };
-        }),
-      });
+          },
+        });
+        ids.push(model.id);
+      }
     });
+    return ids;
   }
 
   /**
@@ -176,7 +211,16 @@ export class SentenceService {
     return [...r, ...l];
   }
 
-  private async planNext(userId: bigint, sentenceLevel: number): Promise<void> {
+  /**
+   * 按需 推动下一批次语句生成
+   * @param userId
+   * @param sentenceLevel
+   * @returns 生成后的新语句ids
+   */
+  private async getPlannedNext(
+    userId: bigint,
+    sentenceLevel: number,
+  ): Promise<bigint[]> {
     const PLAN_BATCH_COUNT = 10; // 每批次需要规划的语句数量
 
     const undoneCount = await this.prisma.userSentenceHistory.count({
@@ -194,7 +238,8 @@ export class SentenceService {
         PLAN_BATCH_COUNT,
       );
       // 写入数据库
-      await this.createUserSentenceHistories(userId, sentences);
+      return this.createUserSentenceHistories(userId, sentences);
     }
+    return [];
   }
 }

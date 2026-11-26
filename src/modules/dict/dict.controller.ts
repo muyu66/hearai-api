@@ -22,8 +22,8 @@ export class DictController {
    * @returns
    */
   @Post(':word/bad-feedback')
-  async bad(@Body() body: { id: string }) {
-    return this.dictService.badDict(body.id);
+  async bad(@Param('word') word: string) {
+    return this.dictService.badDict(word);
   }
 
   /**
