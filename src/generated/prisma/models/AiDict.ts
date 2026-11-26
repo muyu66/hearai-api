@@ -27,11 +27,11 @@ export type AggregateAiDict = {
 }
 
 export type AiDictAvgAggregateOutputType = {
-  rank: number | null
+  badScore: number | null
 }
 
 export type AiDictSumAggregateOutputType = {
-  rank: number | null
+  badScore: number | null
 }
 
 export type AiDictMinAggregateOutputType = {
@@ -39,7 +39,7 @@ export type AiDictMinAggregateOutputType = {
   translation: string | null
   ukPhonetic: string | null
   usPhonetic: string | null
-  rank: number | null
+  badScore: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -50,7 +50,7 @@ export type AiDictMaxAggregateOutputType = {
   translation: string | null
   ukPhonetic: string | null
   usPhonetic: string | null
-  rank: number | null
+  badScore: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -61,7 +61,7 @@ export type AiDictCountAggregateOutputType = {
   translation: number
   ukPhonetic: number
   usPhonetic: number
-  rank: number
+  badScore: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -70,11 +70,11 @@ export type AiDictCountAggregateOutputType = {
 
 
 export type AiDictAvgAggregateInputType = {
-  rank?: true
+  badScore?: true
 }
 
 export type AiDictSumAggregateInputType = {
-  rank?: true
+  badScore?: true
 }
 
 export type AiDictMinAggregateInputType = {
@@ -82,7 +82,7 @@ export type AiDictMinAggregateInputType = {
   translation?: true
   ukPhonetic?: true
   usPhonetic?: true
-  rank?: true
+  badScore?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -93,7 +93,7 @@ export type AiDictMaxAggregateInputType = {
   translation?: true
   ukPhonetic?: true
   usPhonetic?: true
-  rank?: true
+  badScore?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -104,7 +104,7 @@ export type AiDictCountAggregateInputType = {
   translation?: true
   ukPhonetic?: true
   usPhonetic?: true
-  rank?: true
+  badScore?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -202,7 +202,7 @@ export type AiDictGroupByOutputType = {
   translation: string
   ukPhonetic: string
   usPhonetic: string
-  rank: number
+  badScore: number
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -236,7 +236,7 @@ export type AiDictWhereInput = {
   translation?: Prisma.StringFilter<"AiDict"> | string
   ukPhonetic?: Prisma.StringFilter<"AiDict"> | string
   usPhonetic?: Prisma.StringFilter<"AiDict"> | string
-  rank?: Prisma.IntFilter<"AiDict"> | number
+  badScore?: Prisma.IntFilter<"AiDict"> | number
   createdAt?: Prisma.DateTimeFilter<"AiDict"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiDict"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"AiDict"> | Date | string | null
@@ -247,7 +247,7 @@ export type AiDictOrderByWithRelationInput = {
   translation?: Prisma.SortOrder
   ukPhonetic?: Prisma.SortOrder
   usPhonetic?: Prisma.SortOrder
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -262,7 +262,7 @@ export type AiDictWhereUniqueInput = Prisma.AtLeast<{
   translation?: Prisma.StringFilter<"AiDict"> | string
   ukPhonetic?: Prisma.StringFilter<"AiDict"> | string
   usPhonetic?: Prisma.StringFilter<"AiDict"> | string
-  rank?: Prisma.IntFilter<"AiDict"> | number
+  badScore?: Prisma.IntFilter<"AiDict"> | number
   createdAt?: Prisma.DateTimeFilter<"AiDict"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiDict"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"AiDict"> | Date | string | null
@@ -273,7 +273,7 @@ export type AiDictOrderByWithAggregationInput = {
   translation?: Prisma.SortOrder
   ukPhonetic?: Prisma.SortOrder
   usPhonetic?: Prisma.SortOrder
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -292,7 +292,7 @@ export type AiDictScalarWhereWithAggregatesInput = {
   translation?: Prisma.StringWithAggregatesFilter<"AiDict"> | string
   ukPhonetic?: Prisma.StringWithAggregatesFilter<"AiDict"> | string
   usPhonetic?: Prisma.StringWithAggregatesFilter<"AiDict"> | string
-  rank?: Prisma.IntWithAggregatesFilter<"AiDict"> | number
+  badScore?: Prisma.IntWithAggregatesFilter<"AiDict"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AiDict"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AiDict"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AiDict"> | Date | string | null
@@ -303,7 +303,7 @@ export type AiDictCreateInput = {
   translation: string
   ukPhonetic: string
   usPhonetic: string
-  rank?: number
+  badScore?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -314,7 +314,7 @@ export type AiDictUncheckedCreateInput = {
   translation: string
   ukPhonetic: string
   usPhonetic: string
-  rank?: number
+  badScore?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -325,7 +325,7 @@ export type AiDictUpdateInput = {
   translation?: Prisma.StringFieldUpdateOperationsInput | string
   ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
   usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.IntFieldUpdateOperationsInput | number
+  badScore?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -336,7 +336,7 @@ export type AiDictUncheckedUpdateInput = {
   translation?: Prisma.StringFieldUpdateOperationsInput | string
   ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
   usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.IntFieldUpdateOperationsInput | number
+  badScore?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -347,7 +347,7 @@ export type AiDictCreateManyInput = {
   translation: string
   ukPhonetic: string
   usPhonetic: string
-  rank?: number
+  badScore?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -358,7 +358,7 @@ export type AiDictUpdateManyMutationInput = {
   translation?: Prisma.StringFieldUpdateOperationsInput | string
   ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
   usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.IntFieldUpdateOperationsInput | number
+  badScore?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -369,7 +369,7 @@ export type AiDictUncheckedUpdateManyInput = {
   translation?: Prisma.StringFieldUpdateOperationsInput | string
   ukPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
   usPhonetic?: Prisma.StringFieldUpdateOperationsInput | string
-  rank?: Prisma.IntFieldUpdateOperationsInput | number
+  badScore?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -386,14 +386,14 @@ export type AiDictCountOrderByAggregateInput = {
   translation?: Prisma.SortOrder
   ukPhonetic?: Prisma.SortOrder
   usPhonetic?: Prisma.SortOrder
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type AiDictAvgOrderByAggregateInput = {
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
 }
 
 export type AiDictMaxOrderByAggregateInput = {
@@ -401,7 +401,7 @@ export type AiDictMaxOrderByAggregateInput = {
   translation?: Prisma.SortOrder
   ukPhonetic?: Prisma.SortOrder
   usPhonetic?: Prisma.SortOrder
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -412,14 +412,14 @@ export type AiDictMinOrderByAggregateInput = {
   translation?: Prisma.SortOrder
   ukPhonetic?: Prisma.SortOrder
   usPhonetic?: Prisma.SortOrder
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
 }
 
 export type AiDictSumOrderByAggregateInput = {
-  rank?: Prisma.SortOrder
+  badScore?: Prisma.SortOrder
 }
 
 
@@ -429,7 +429,7 @@ export type AiDictSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   translation?: boolean
   ukPhonetic?: boolean
   usPhonetic?: boolean
-  rank?: boolean
+  badScore?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -442,13 +442,13 @@ export type AiDictSelectScalar = {
   translation?: boolean
   ukPhonetic?: boolean
   usPhonetic?: boolean
-  rank?: boolean
+  badScore?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type AiDictOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"word" | "translation" | "ukPhonetic" | "usPhonetic" | "rank" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["aiDict"]>
+export type AiDictOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"word" | "translation" | "ukPhonetic" | "usPhonetic" | "badScore" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["aiDict"]>
 
 export type $AiDictPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AiDict"
@@ -458,7 +458,10 @@ export type $AiDictPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     translation: string
     ukPhonetic: string
     usPhonetic: string
-    rank: number
+    /**
+     * 差评数量
+     */
+    badScore: number
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -835,7 +838,7 @@ export interface AiDictFieldRefs {
   readonly translation: Prisma.FieldRef<"AiDict", 'String'>
   readonly ukPhonetic: Prisma.FieldRef<"AiDict", 'String'>
   readonly usPhonetic: Prisma.FieldRef<"AiDict", 'String'>
-  readonly rank: Prisma.FieldRef<"AiDict", 'Int'>
+  readonly badScore: Prisma.FieldRef<"AiDict", 'Int'>
   readonly createdAt: Prisma.FieldRef<"AiDict", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AiDict", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"AiDict", 'DateTime'>

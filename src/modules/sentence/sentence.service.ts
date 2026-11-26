@@ -5,10 +5,12 @@ import { ReportSentenceHistoryDto } from './dto/report-sentence-history.dto';
 import { LearningSentenceService } from './learning-sentence.service';
 import { ReviewSentenceService } from './review-sentence.service';
 import { UserSentenceHistoryDto } from './dto/sentence.dto';
+import { WordTokenizer } from 'natural';
 
 @Injectable()
 export class SentenceService {
   private readonly logger = new Logger(SentenceService.name);
+  private readonly tokenizer = new WordTokenizer();
 
   constructor(
     private readonly prisma: PrismaService,
@@ -57,12 +59,17 @@ export class SentenceService {
     );
 
     return userSentenceHistories.map((userSentenceHistory) => {
+      const tokenizeWords = this.tokenizer
+        .tokenize(userSentenceHistory.sentence.words)
+        .map((v) => v.toLowerCase());
+
       const pronUrl = pronUrls.find(
         (pronUrl) => pronUrl.sentenceId === userSentenceHistory.sentenceId,
       )?.pronUrl;
       return {
         taskId: userSentenceHistory.id.toString(),
         words: userSentenceHistory.sentence.words,
+        tokenizeWords,
         translation: userSentenceHistory.sentence.translation,
         pronUrl: pronUrl || null,
       };
@@ -74,7 +81,7 @@ export class SentenceService {
     speaker: string,
   ): Promise<string | null> {
     return this.ossService.generateSignatureUrl(
-      `pronunciations/sentence/speakers/${speaker}/ids/${sentenceId.toString()}.wav`,
+      `sentence_pronunciations/speakers/${speaker}/ids/${sentenceId.toString()}.wav`,
     );
   }
 

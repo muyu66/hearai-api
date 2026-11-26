@@ -53,7 +53,8 @@ model AiDict {
   translation String @db.VarChar(1000)
   ukPhonetic  String @map("uk_phonetic") @db.VarChar(255)
   usPhonetic  String @map("us_phonetic") @db.VarChar(255)
-  rank        Int    @default(0) @db.UnsignedTinyInt
+  /// 差评数量
+  badScore    Int    @default(0) @map("bad_score") @db.UnsignedInt
 
   createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(0)

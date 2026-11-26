@@ -7,12 +7,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { SentenceModule } from './modules/sentence/sentence.module';
+import { DictModule } from './modules/dict/dict.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
     SentenceModule,
+    DictModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   providers: [

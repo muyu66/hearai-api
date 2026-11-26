@@ -892,7 +892,7 @@ export const AiDictScalarFieldEnum = {
   translation: 'translation',
   ukPhonetic: 'ukPhonetic',
   usPhonetic: 'usPhonetic',
-  rank: 'rank',
+  badScore: 'badScore',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
